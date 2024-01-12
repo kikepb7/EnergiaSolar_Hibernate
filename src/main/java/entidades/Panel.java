@@ -10,9 +10,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Panels")
+@Table(name = "Panel")
 @ToString @EqualsAndHashCode
-public class Panels implements Serializable {
+public class Panel implements Serializable {
 
     // 1. Attributes
     @Id
@@ -58,7 +58,7 @@ public class Panels implements Serializable {
 
 
     // 2. Constructors
-    public Panels() {}
+    public Panel() {}
 
 
 }
