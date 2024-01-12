@@ -12,13 +12,19 @@ public interface PanelDAOInterface {
     List<Panel> getMoreExpensive();
     List<String> getAllImages();
     List<PanelDTO> getImagesName();
-    Long allPanels();
+    Long totalPanels();
     Panel findById(Long id);
     Double avgPrices();
     Double avgBrandPrices(String brand);
-    List<Panel> findByNameLike(String name);
+    List<Panel> findByModelLike(String name);
+
+    List<Panel> findByMaterialLike(String material);
+
     List<Panel> findBetweenPrices(Double min, Double max);
     List<Panel> findBetweenBrandPrices(Double min, Double max, String brand);
+
+    List<Panel> findBetweenCategoryPower(Double min, Double max, String category);
+
     List<Panel> findBetweenBrandPrices(Double min, Double max, List<String> brands);
     Panel create(Panel panel);
     Panel update(Panel panel);

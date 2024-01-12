@@ -38,7 +38,7 @@ public class Panel implements Serializable {
 
     @Column(name = "efficiency")
     @Getter @Setter
-    private double efficiency;
+    private String efficiency;
 
     @Column(name = "fabrication_date")
     @Getter @Setter
@@ -60,5 +60,16 @@ public class Panel implements Serializable {
     // 2. Constructors
     public Panel() {}
 
-
+    public Panel(Long id, String model, String brand, String material, double power, String efficiency, LocalDate fabricationDate, String image, String category, double price) {
+        this.id = id;
+        this.model = model;
+        this.brand = brand;
+        this.material = material;
+        this.power = power;
+        this.efficiency = efficiency;
+        this.fabricationDate = fabricationDate;
+        this.image = image;
+        this.category = category;
+        this.price = price;
+    }
 }

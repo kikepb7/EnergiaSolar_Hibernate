@@ -57,6 +57,13 @@
             <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.appslandia</groupId>
+            <artifactId>appslandia-common</artifactId>
+            <version>1.13</version>
+        </dependency>
+
     </dependencies>
 
 </project>
