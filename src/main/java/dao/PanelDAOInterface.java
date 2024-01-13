@@ -6,7 +6,6 @@ import entidades.Panel;
 import java.util.List;
 
 public interface PanelDAOInterface {
-
     List<Panel> getAllPanels();
     List<Panel> getAll(int page, int amount);
     List<Panel> getMoreExpensive();

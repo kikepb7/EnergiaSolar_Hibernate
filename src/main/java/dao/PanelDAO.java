@@ -214,7 +214,7 @@ public class PanelDAO implements PanelDAOInterface {
         Query<Panel> query = session.createQuery("FROM Panel p WHERE p.price >= :min AND p.price <= :max AND p.brand IN (:brands)", Panel.class);
         query.setParameter("min", min);
         query.setParameter("max", max);
-        query.setParameter("brand", brands);
+        query.setParameterList("brand", brands);
 
         List<Panel> filter = query.list();
         session.close();

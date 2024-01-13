@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de estudiantes</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+          crossorigin="anonymous">
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#navbar" aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand">Energía Solar</a>
+        </div>
+    </div>
+</nav>
+
+<br>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <h1>Registrar panel solar</h1>
+            <form action="/paneles/registrar" id="registrar" enctype="application/json" method = "post">
+                <div class="form-group">
+                    <label class="control-label" for="brand">Marca: </label>
+                    <input id="brand" type="text" class="form-control" th:field="*{brand}" required autofocus="autofocus">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="model">Modelo: </label>
+                    <input id="model" type="text" class="form-control" th:field="*{model}" required
+                           autofocus="autofocus">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="category">Categoria: </label>
+                    <input id="category" type="text" class="form-control" th:field="*{category}" required
+                           autofocus="autofocus">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="efficiency">Eficiencia: </label>
+                    <input id="efficiency" type="text" class="form-control" th:field="*{efficiency}" required
+                           autofocus="autofocus">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="material">Material: </label>
+                    <input id="material" type="text" class="form-control" th:field="*{material}" required
+                           autofocus="autofocus">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="power">Potencia: </label>
+                    <input id="power" type="text" class="form-control" th:field="*{power}" required
+                           autofocus="autofocus">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="price">Precio: </label>
+                    <input id="price" type="text" class="form-control" th:field="*{price}" required
+                           autofocus="autofocus">
+                </div>
+                <div class="form-group">
+                    <label class="control-label" for="fabricationDate">Fecha de fabricación: </label>
+                    <input id="fabricationDate" type="date" class="form-control" th:field="*{fabricationDate}" required
+                           autofocus="autofocus">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success" formaction="/paneles">Registrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous">
+</script>
+
+</body>
+</html>
