@@ -6,11 +6,17 @@ import com.google.gson.GsonBuilder;
 import dao.PanelDAOInterface;
 import dto.PanelDTO;
 import entidades.Panel;
+import spark.ModelAndView;
 import spark.Spark;
+import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+
 
 public class PanelAPIRest {
     private PanelDAOInterface panelDAO;
@@ -24,11 +30,21 @@ public class PanelAPIRest {
         panelDAO = implementation;
 
         /* GET */
+        // Endpoint para la página de inicio
+        Spark.get("paneles", (request, response) -> {
+            List<Panel> panels = panelDAO.getAllPanels();
+
+            Map<String, Object> model = new HashMap<>();
+            model.put("panels", panels);
+
+            return new ModelAndView(model, "paneles"); // "paneles" es el nombre del archivo HTML en resources/templates/
+        }, new ThymeleafTemplateEngine());
+
         // Endpoint para obtener todos los paneles disponibles en la BD
-        Spark.get("/paneles", (request, response) -> {
+        /*Spark.get("/paneles", (request, response) -> {
            List<Panel> panels = panelDAO.getAllPanels();
            return gson.toJson(panels);
-        });
+        });*/
 
         // Endpoint para obtener los paneles más caros disponibles en la BD
         Spark.get("/paneles/mas_caros", (request, response) -> {
@@ -45,6 +61,12 @@ public class PanelAPIRest {
         // Endpoint para obtener un resumen con solo el nombre el precio y la imagen
         Spark.get("/paneles/resumen", (request, response) -> {
            List<PanelDTO> resume = panelDAO.getImagesName();
+           return gson.toJson(resume);
+        });
+
+        // Endpoint para obtener un resumen con los modelos y la fecha de fabricación
+        Spark.get("/paneles/modelos_fabricacion", (request, response) -> {
+           List<PanelDTO> resume = panelDAO.getModelsFabrication();
            return gson.toJson(resume);
         });
 
@@ -68,10 +90,33 @@ public class PanelAPIRest {
         });
 
         // Endpoint para calcular la media de precios de los paneles de una marca concreta
-        Spark.get("/panels/media_precios/:brand", (request, response) -> {
+        Spark.get("/paneles/media_precios/:brand", (request, response) -> {
            String brand = request.params(":brand");
            Double average = panelDAO.avgBrandPrices(brand);
            return average.toString();
+        });
+
+        // Endpoint para obtener los paneles de un año de fabricación concreto
+        Spark.get("/paneles/fabricacion/:year", (request, response) -> {
+
+            int year = Integer.parseInt(request.params(":year"));
+
+            List<Panel> panels = panelDAO.getPanelsByMaxFabricationYear(year);
+
+            return gson.toJson(panels);
+        });
+
+        // Endpoint para obtener el panel con máxima eficiencia de una marca concreta
+        Spark.get("/paneles/max_eficiencia/:brand", (request, response) -> {
+            String brand = request.params(":brand");
+            Panel panel = panelDAO.getPanelMaxEfficiency(brand);
+
+            if (panel != null) {
+                return gson.toJson(panel);
+            } else {
+                response.status(404);
+                return "Panel de la marca " + brand + " no encontrado";
+            }
         });
 
         // Endpoint para buscar paneles por nombre
@@ -105,7 +150,7 @@ public class PanelAPIRest {
             return gson.toJson(panels);
         });
 
-        // Endpoint para buscar paneles entre potencias de una categoria concreta
+        // Endpoint para buscar paneles entre potencias de una categoría concreta
         Spark.get("/paneles/buscar/:min/:max/:category", (request, response) -> {
             Double min = Double.parseDouble(request.params(":min"));
             Double max = Double.parseDouble(request.params(":max"));
@@ -130,7 +175,7 @@ public class PanelAPIRest {
 
 
         /* POST */
-        // Endpoint para crear un panel con todos los daots
+        // Endpoint para crear un panel con todos los datos
         Spark.post("/paneles", (request, response) -> {
            String body = request.body();
            Panel newPanel = gson.fromJson(body, Panel.class);

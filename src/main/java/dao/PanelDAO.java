@@ -64,6 +64,16 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     @Override
+    public List<PanelDTO> getModelsFabrication() {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        List<PanelDTO> panels = session.createQuery("SELECT NEW dto.PanelDTO(p.model, p.fabricationDate) FROM Panel p", PanelDTO.class).list();
+        session.close();
+
+        return panels;
+    }
+
+    @Override
     public Long totalPanels() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -104,6 +114,29 @@ public class PanelDAO implements PanelDAOInterface {
         session.close();
 
         return average;
+    }
+
+    @Override
+    public List<Panel> getPanelsByMaxFabricationYear(int year) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        Query<Panel> query = session.createQuery("FROM Panel p WHERE YEAR(p.fabricationDate) = :year", Panel.class);
+        query.setParameter("year", year);
+
+        List<Panel> panels = query.getResultList();
+
+        session.close();
+
+        return panels;
+    }
+
+    @Override
+    public Panel getPanelMaxEfficiency(String brand) {
+            Session session = HibernateUtil.getSessionFactory().openSession();
+            Query<Panel> query = session.createQuery("FROM Panel p WHERE p.brand = :brand ORDER BY p.efficiency DESC", Panel.class);
+            query.setParameter("brand", brand);
+            query.setMaxResults(1);
+            return query.uniqueResult();
     }
 
     @Override
