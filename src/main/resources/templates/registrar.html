@@ -38,48 +38,49 @@
         <div class="col-md-6 col-md-offset-3">
 
             <h1>Registrar panel solar</h1>
-            <form action="/paneles/registrar" id="registrar" enctype="application/json" method = "post">
+<!--            <form action="/paneles" id="registrar" enctype="application/json" method="POST">-->
+            <form action="/paneles" method="POST" th:object="${panel}">
                 <div class="form-group">
                     <label class="control-label" for="brand">Marca: </label>
-                    <input id="brand" type="text" class="form-control" th:field="*{brand}" required autofocus="autofocus">
+                    <input id="brand" name="brand" type="text" class="form-control" th:field="*{brand}" required autofocus="autofocus">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="model">Modelo: </label>
-                    <input id="model" type="text" class="form-control" th:field="*{model}" required
+                    <input id="model" name="model" type="text" class="form-control" th:field="*{model}" required
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="category">Categoria: </label>
-                    <input id="category" type="text" class="form-control" th:field="*{category}" required
+                    <input id="category" name="category" type="text" class="form-control" th:field="*{category}" required
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="efficiency">Eficiencia: </label>
-                    <input id="efficiency" type="text" class="form-control" th:field="*{efficiency}" required
+                    <input id="efficiency" name="efficiency" type="text" class="form-control" th:field="*{efficiency}" required
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="material">Material: </label>
-                    <input id="material" type="text" class="form-control" th:field="*{material}" required
+                    <input id="material" name="material" type="text" class="form-control" th:field="*{material}" required
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="power">Potencia: </label>
-                    <input id="power" type="text" class="form-control" th:field="*{power}" required
+                    <input id="power" name="power" type="number" step="0.1" class="form-control" th:field="*{power}"
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="price">Precio: </label>
-                    <input id="price" type="text" class="form-control" th:field="*{price}" required
+                    <input id="price" name="price" type="number" step="0.01" class="form-control" th:field="*{price}"
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
                     <label class="control-label" for="fabricationDate">Fecha de fabricación: </label>
-                    <input id="fabricationDate" type="date" class="form-control" th:field="*{fabricationDate}" required
+                    <input id="fabricationDate" name="fabricationDate" type="date" class="form-control" th:field="*{fabricationDate}"
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success" formaction="/paneles">Registrar</button>
+                    <button type="submit" class="btn btn-success">Registrar</button>
                 </div>
             </form>
         </div>

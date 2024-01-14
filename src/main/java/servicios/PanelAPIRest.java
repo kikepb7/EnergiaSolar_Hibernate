@@ -174,60 +174,26 @@ public class PanelAPIRest {
 
         /* POST */
         // Endpoint para crear un panel con todos los datos
-        /*Spark.post("/paneles", (request, response) -> {
+        Spark.post("/paneles", (request, response) -> {
             String body = request.body();
             Panel newPanel = gson.fromJson(body, Panel.class);
 
             Panel created = panelDAO.create(newPanel);
 
             return gson.toJson(created);
-        });*/
-
-        Spark.post("/paneles", (request, response) -> {
-            try {
-                String brand = request.queryParams("brand");
-                String model = request.queryParams("model");
-                String category = request.queryParams("category");
-                String material = request.queryParams("material");
-                String efficiency = request.queryParams("efficiency");
-                String powerStr = request.queryParams("power");
-                String priceStr = request.queryParams("price");
-                String dateStr = request.queryParams("fabricationDate");
-                String body = request.body();
-
-                double parsePower = (powerStr != null) ? Double.parseDouble(powerStr) : 0.0;
-                double parsePrice = (priceStr != null) ? Double.parseDouble(priceStr) : 0.0;
-                LocalDate parseDate = (dateStr != null) ? LocalDate.parse(dateStr) : null;
-
-                Panel panel = json2User(body);
-
-                if (panel != null) {
-                    System.out.println("Panel creado correctamente");
-                    panel.setBrand(brand);
-                    panel.setModel(model);
-                    panel.setCategory(category);
-                    panel.setMaterial(material);
-                    panel.setEfficiency(efficiency);
-                    panel.setPower(parsePower);
-                    panel.setPrice(parsePrice);
-                    panel.setFabricationDate(parseDate);
-                }
-
-                return panelDAO.create(panel);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return "Error al registrar un panel";
-            }
         });
 
         Spark.get("paneles/registrar", (request, response) -> {
             List<Panel> panels = panelDAO.getAllPanels();
+            Panel panel = new Panel();
 
             Map<String, Object> model = new HashMap<>();
             model.put("panels", panels);
+            model.put("panel", panel);
 
             return new ModelAndView(model, "registrar");
         }, new ThymeleafTemplateEngine());
+
 
 
         /* PUT */

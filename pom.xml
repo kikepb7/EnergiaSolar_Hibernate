@@ -65,6 +65,7 @@
             <version>1.13</version>
         </dependency>
 
+<!--        WEB-->
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>
@@ -81,6 +82,13 @@
             <groupId>com.hmsonline</groupId>
             <artifactId>json-transformer</artifactId>
             <version>0.1.0</version>
+        </dependency>
+
+<!--        FIREBASE-->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>6.13.0</version>
         </dependency>
     </dependencies>
 </project>
