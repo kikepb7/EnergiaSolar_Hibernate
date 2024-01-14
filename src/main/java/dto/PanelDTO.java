@@ -10,16 +10,16 @@ public class PanelDTO {
 
     // 1. Attributes
     @Getter @Setter
-    private String name;
+    private String model;
     @Getter @Setter
-    private String imageURL;
+    private String image;
 
 
     // 2. Constructors
     public PanelDTO() {}
 
-    public PanelDTO(String name, String imageURL) {
-        this.name = name;
-        this.imageURL = imageURL;
+    public PanelDTO(String model, String image) {
+        this.model = model;
+        this.image = image;
     }
 }

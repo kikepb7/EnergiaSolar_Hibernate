@@ -24,7 +24,7 @@
             <th>ID</th>
             <th>Marca</th>
             <th>Modelo</th>
-            <th>Potencia</th>
+            <th>Potencia Nominal</th>
             <th>Precio</th>
             <th>Acciones</th>
         </tr>
@@ -34,7 +34,7 @@
             <td th:text="${panel.id}"></td>
             <td th:text="${panel.brand}"></td>
             <td th:text="${panel.model}"></td>
-            <td th:text="${panel.power} + ' W'"></td>
+            <td th:text="${panel.nominalPower} + ' W'"></td>
             <td th:text="${panel.price} + ' €'"></td>
             <td>
                 <!--<a class="btn btn-info" >Editar</a>
@@ -47,7 +47,7 @@
     </table>
 </div>
 
-<!--<script>
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.eliminar-panel').forEach(function (button) {
             button.addEventListener('click', function () {
@@ -69,7 +69,7 @@
             });
         });
     });
-</script>-->
+</script>
 
 </body>
 </html>

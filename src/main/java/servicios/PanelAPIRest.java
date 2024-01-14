@@ -64,7 +64,7 @@ public class PanelAPIRest {
 
         // Endpoint para obtener un resumen con los modelos y la fecha de fabricación
         Spark.get("/paneles/modelos_fabricacion", (request, response) -> {
-            List<PanelDTO> resume = panelDAO.getModelsFabrication();
+            List<PanelDTO> resume = panelDAO.getModelsProduction();
             return gson.toJson(resume);
         });
 
@@ -99,7 +99,7 @@ public class PanelAPIRest {
 
             int year = Integer.parseInt(request.params(":year"));
 
-            List<Panel> panels = panelDAO.getPanelsByMaxFabricationYear(year);
+            List<Panel> panels = panelDAO.getPanelsByMaxProductionYear(year);
 
             return gson.toJson(panels);
         });
@@ -127,7 +127,7 @@ public class PanelAPIRest {
         // Endpoint para buscar paneles por material
         Spark.get("/paneles/buscar/:material", (request, response) -> {
             String material = request.params(":material");
-            List<Panel> panels = panelDAO.findByMaterialLike(material);
+            List<Panel> panels = panelDAO.findByCategoryLike(material);
             return gson.toJson(panels);
         });
 
@@ -175,12 +175,17 @@ public class PanelAPIRest {
         /* POST */
         // Endpoint para crear un panel con todos los datos
         Spark.post("/paneles", (request, response) -> {
-            String body = request.body();
-            Panel newPanel = gson.fromJson(body, Panel.class);
+            try {
+                String body = request.body();
+                Panel newPanel = gson.fromJson(body, Panel.class);
 
-            Panel created = panelDAO.create(newPanel);
+                Panel created = panelDAO.create(newPanel);
 
-            return gson.toJson(created);
+                return gson.toJson(created);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            return "HOLA";
         });
 
         Spark.get("paneles/registrar", (request, response) -> {
@@ -249,14 +254,5 @@ public class PanelAPIRest {
 
             return gson.toJson(pageResult);
         });
-    }
-    private static Panel json2User(String body) {
-        Panel panel = null;
-        try {
-            panel = new Gson().fromJson(body, Panel.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return panel;
     }
 }

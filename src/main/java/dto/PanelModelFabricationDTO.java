@@ -10,15 +10,15 @@ public class PanelModelFabricationDTO {
     @Getter @Setter
     private String model;
     @Getter @Setter
-    private LocalDate fabricationDate;
+    private LocalDate productionDate;
 
 
     // 2. Constructors
     public PanelModelFabricationDTO() {}
 
-    public PanelModelFabricationDTO(String model, LocalDate fabricationDate) {
+    public PanelModelFabricationDTO(String model, LocalDate productionDate) {
         this.model = model;
-        this.fabricationDate = fabricationDate;
+        this.productionDate = productionDate;
     }
 }
 

@@ -37,7 +37,7 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> getMoreExpensive() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<Panel> moreExpensive = session.createQuery("FROM Panel p WHERE p.price > 1500", Panel.class).list();
+        List<Panel> moreExpensive = session.createQuery("FROM Panel p WHERE p.price > 200", Panel.class).list();
         session.close();
 
         return moreExpensive;
@@ -64,10 +64,10 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     @Override
-    public List<PanelDTO> getModelsFabrication() {
+    public List<PanelDTO> getModelsProduction() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<PanelDTO> panels = session.createQuery("SELECT NEW dto.PanelDTO(p.model, p.fabricationDate) FROM Panel p", PanelDTO.class).list();
+        List<PanelDTO> panels = session.createQuery("SELECT NEW dto.PanelDTO(p.model, p.productionDate) FROM Panel p", PanelDTO.class).list();
         session.close();
 
         return panels;
@@ -117,10 +117,10 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     @Override
-    public List<Panel> getPanelsByMaxFabricationYear(int year) {
+    public List<Panel> getPanelsByMaxProductionYear(int year) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE YEAR(p.fabricationDate) = :year", Panel.class);
+        Query<Panel> query = session.createQuery("FROM Panel p WHERE YEAR(p.productionDate) = :year", Panel.class);
         query.setParameter("year", year);
 
         List<Panel> panels = query.getResultList();
@@ -145,19 +145,19 @@ public class PanelDAO implements PanelDAOInterface {
 
         Query<Panel> query = session.createQuery("FROM Panel p WHERE p.model like :model", Panel.class);
 
-        List<Panel> filter = query.setParameter("name", "%" + model + "%").list();
+        List<Panel> filter = query.setParameter("model", "%" + model + "%").list();
         session.close();
 
         return filter;
     }
 
     @Override
-    public List<Panel> findByMaterialLike(String material) {
+    public List<Panel> findByCategoryLike(String category) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.material like :material", Panel.class);
+        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.category like :category", Panel.class);
 
-        List<Panel> filter = query.setParameter("name", "%" + material + "%").list();
+        List<Panel> filter = query.setParameter("category", "%" + category + "%").list();
         session.close();
 
         return filter;
@@ -196,7 +196,7 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> findBetweenCategoryPower(Double min, Double max, String category) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.power >= :min AND p.power <= :max AND p.category = :category", Panel.class);
+        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.nominal_power >= :min AND p.nominal_power <= :max AND p.category = :category", Panel.class);
         query.setParameter("min", min);
         query.setParameter("max", max);
         query.setParameter("category", category);
