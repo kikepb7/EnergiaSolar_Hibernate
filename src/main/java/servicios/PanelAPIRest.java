@@ -241,7 +241,7 @@ public class PanelAPIRest {
 
         /* POST */
         // Endpoint para crear un panel con todos los datos
-        Spark.post("/paneles", (request, response) -> {
+        Spark.post("/paneles/registrar", (request, response) -> {
 
             String body = request.body();
             Panel newPanel = gson.fromJson(body, Panel.class);
@@ -266,7 +266,7 @@ public class PanelAPIRest {
 
         /* PUT */
         // Endpoint para actualizar un panel por su ID
-        Spark.put("paneles/:id", (request, response) -> {
+        Spark.put("paneles/editar/:id", (request, response) -> {
             Long id = Long.parseLong(request.params(":id"));
             String body = request.body();
 

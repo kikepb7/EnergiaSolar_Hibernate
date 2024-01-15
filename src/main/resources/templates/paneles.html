@@ -37,7 +37,7 @@
             <td th:text="${panel.nominalPower} + ' W'"></td>
             <td th:text="${panel.price} + ' €'"></td>
             <td>
-                <a class="btn btn-info editar-panel" href="/paneles/editar/${panel.id}">Editar</a>
+                <a class="btn btn-info editar-panel" th:href="'/paneles/editar/' + ${panel.id}">Editar</a>
                 <a class="btn btn-danger eliminar-panel">Eliminar</a>
             </td>
         </tr>

@@ -38,8 +38,7 @@
         <div class="col-md-6 col-md-offset-3">
 
             <h1>Registrar panel solar</h1>
-<!--            <form action="/paneles" id="registrar" enctype="application/json" method="POST">-->
-            <form action="/paneles" method="POST" th:object="${panel}">
+            <form id="registrarPanelForm" method="POST" th:action="'/paneles'" th:object="${panel}">
                 <div class="form-group">
                     <label class="control-label" for="brand">Marca: </label>
                     <input id="brand" name="brand" type="text" class="form-control" th:field="*{brand}" required autofocus="autofocus">
@@ -75,7 +74,7 @@
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success">Registrar</button>
+                    <button type="submit" class="btn btn-success" onClick="registerPanel()" href="paneles.html">Registrar</button>
                 </div>
             </form>
         </div>
@@ -86,6 +85,33 @@
         src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
         integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous">
+</script>
+
+<script>
+async function registerPanel() {
+
+      let datos = {};
+      datos.brand = document.getElementById('brand').value;
+      datos.model = document.getElementById('model').value;
+      datos.category = document.getElementById('category').value;
+      datos.efficiency = document.getElementById('efficiency').value;
+      datos.nominalPower = document.getElementById('nominalPower').value;
+      datos.price = document.getElementById('price').value;
+      datos.productionDate = document.getElementById('productionDate').value;
+
+
+      const request = await fetch('/paneles/registrar', {
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)       // Coge cualquier objeto de JS y lo convierte a un String de JSON
+      });
+
+      window.location.href = 'paneles.html';
+
+    }
 </script>
 
 </body>
