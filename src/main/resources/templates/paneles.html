@@ -37,10 +37,8 @@
             <td th:text="${panel.nominalPower} + ' W'"></td>
             <td th:text="${panel.price} + ' €'"></td>
             <td>
-                <!--<a class="btn btn-info" >Editar</a>
-                <a class="btn btn-danger">Eliminar</a>-->
-                <a class="btn btn-info editar-panel" th:data-id="${panel.id}">Editar</a>
-                <a class="btn btn-danger eliminar-panel" th:data-id="${panel.id}">Eliminar</a>
+                <a class="btn btn-info editar-panel" href="/paneles/editar/${panel.id}">Editar</a>
+                <a class="btn btn-danger eliminar-panel">Eliminar</a>
             </td>
         </tr>
         </tbody>
@@ -61,7 +59,6 @@
                 })
                 .then(response => response.text())
                 .then(data => {
-
                     // Elimina la fila de la tabla en el cliente
                     button.closest('tr').remove();
                 })

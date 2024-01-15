@@ -282,6 +282,20 @@ public class PanelAPIRest {
             }
         });
 
+        Spark.get("/paneles/editar/:id", (request, response) -> {
+            Long id = Long.parseLong(request.params(":id"));
+            Panel panel = panelDAO.findById(id);
+
+            if (panel != null) {
+                Map<String, Object> model = new HashMap<>();
+                model.put("panel", panel);
+                return new ModelAndView(model, "editar.html");
+            } else {
+                response.status(404);
+                return null;
+            }
+        }, new ThymeleafTemplateEngine());
+
 
         /* DELETE */
         // Endpoint para eliminar un panel por su ID
