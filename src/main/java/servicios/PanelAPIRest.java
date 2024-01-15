@@ -10,6 +10,7 @@ import entidades.Panel;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,8 +19,8 @@ import java.util.Map;
 
 
 public class PanelAPIRest {
-    private PanelDAOInterface panelDAO;
-    private Gson gson = new GsonBuilder()
+    private final PanelDAOInterface panelDAO;
+    private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .create();
@@ -47,269 +48,193 @@ public class PanelAPIRest {
 
         // Endpoint para obtener los paneles más caros disponibles en la BD
         Spark.get("/paneles/mas_caros", (request, response) -> {
-            try {
-                List<Panel> moreExpensive = panelDAO.getMoreExpensive();
 
-                if (moreExpensive != null && !moreExpensive.isEmpty()) {
-                    return gson.toJson(moreExpensive);
-                } else {
-                    response.status(404);
-                    return "No se encontraron paneles en la base de datos";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
+            List<Panel> moreExpensive = panelDAO.getMoreExpensive();
+
+            if (moreExpensive != null && !moreExpensive.isEmpty()) {
+                return gson.toJson(moreExpensive);
+            } else {
+                response.status(404);
+                return "No se encontraron paneles en la base de datos";
             }
+
         });
 
         // Endpoint para obtener las imágenes de los paneles disponibles en la BD
         Spark.get("/paneles/imagenes", (request, response) -> {
-            try {
-                List<String> images = panelDAO.getAllImages();
 
-                if (images != null && !images.isEmpty()) {
-                    return gson.toJson(images);
-                } else {
-                    response.status(404);
-                    return "No se encontraron paneles en la base de datos";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
+            List<String> images = panelDAO.getAllImages();
+
+            if (images != null && !images.isEmpty()) {
+                return gson.toJson(images);
+            } else {
+                response.status(404);
+                return "No se encontraron paneles en la base de datos";
             }
+
         });
 
         // Endpoint para obtener un resumen con solo el modelo y la imagen
         Spark.get("/paneles/resumen", (request, response) -> {
-            try {
-                List<PanelDTO> resume = panelDAO.getImagesName();
 
-                if (resume != null && !resume.isEmpty()) {
-                    return gson.toJson(resume);
-                } else {
-                    response.status(404);
-                    return "No se encontraron paneles en la base de datos";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
+            List<PanelDTO> resume = panelDAO.getImagesName();
+
+            if (resume != null && !resume.isEmpty()) {
+                return gson.toJson(resume);
+            } else {
+                response.status(404);
+                return "No se encontraron paneles en la base de datos";
             }
+
         });
 
         // Endpoint para obtener un resumen con los modelos y la fecha de fabricación
         Spark.get("/paneles/modelos_fabricacion", (request, response) -> {
-            try {
-                List<PanelModelProductionDTO> resume = panelDAO.getModelsProduction();
 
-                if (resume != null && !resume.isEmpty()) {
-                    return gson.toJson(resume);
-                } else {
-                    response.status(404);
-                    return "No se encontraron paneles en la base de datos";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
+            List<PanelModelProductionDTO> resume = panelDAO.getModelsProduction();
+
+            if (resume != null && !resume.isEmpty()) {
+                return gson.toJson(resume);
+            } else {
+                response.status(404);
+                return "No se encontraron paneles en la base de datos";
             }
+
 
         });
 
         // Endpoint para calcular la media de precios de los paneles
         Spark.get("/paneles/media_precios", (request, response) -> {
-            try {
-                Double average = panelDAO.avgPrices();
 
-                if (average != null) {
-                    return average.toString();
-                } else {
-                    response.status(404);
-                    return "No se encontraron paneles para calcular la media de precios";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
+            Double average = panelDAO.avgPrices();
+
+            if (average != null) {
+                return average.toString();
+            } else {
+                response.status(404);
+                return "No se encontraron paneles para calcular la media de precios";
             }
+
         });
 
         // Endpoint para obtener un panel por su ID
         Spark.get("/paneles/buscarID/:id", (request, response) -> {
-            try {
-                Long id = Long.parseLong(request.params(":id"));
-                Panel panel = panelDAO.findById(id);
 
-                if (panel != null) {
-                    return gson.toJson(panel);
-                } else {
-                    response.status(404);
-                    return "Panel no encontrado";
-                }
-            } catch (NumberFormatException e) {
-                response.status(400);
-                return "Error en el formato del ID";
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
+            Long id = Long.parseLong(request.params(":id"));
+            Panel panel = panelDAO.findById(id);
+
+            if (panel != null) {
+                return gson.toJson(panel);
+            } else {
+                response.status(404);
+                return "Panel no encontrado";
             }
+
         });
 
         // Endpoint para calcular la media de precios de los paneles de una marca concreta
         Spark.get("/paneles/media_precios/:brand", (request, response) -> {
-            try {
-                String brand = request.params(":brand");
 
-                Double average = panelDAO.avgBrandPrices(brand);
+            String brand = request.params(":brand");
 
-                if (average != null) {
-                    return average.toString();
-                } else {
-                    response.status(404);
-                    return "No se encontraron paneles para la marca " + brand;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
+            Double average = panelDAO.avgBrandPrices(brand);
+
+            if (average != null) {
+                return average.toString();
+            } else {
+                response.status(404);
+                return "No se encontraron paneles para la marca " + brand;
             }
+
         });
 
         // Endpoint para obtener los paneles de un año de fabricación concreto
         Spark.get("/paneles/fabricacion/:year", (request, response) -> {
-            try {
-                int year = Integer.parseInt(request.params(":year"));
 
-                List<Panel> panels = panelDAO.getPanelsByMaxProductionYear(year);
+            int year = Integer.parseInt(request.params(":year"));
 
-                return gson.toJson(panels);
-            } catch (NumberFormatException e) {
-                response.status(400);
-                return "Error en el formato del año";
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
-            }
+            List<Panel> panels = panelDAO.getPanelsByMaxProductionYear(year);
+
+            return gson.toJson(panels);
+
         });
 
         // Endpoint para obtener el panel con máxima eficiencia de una marca concreta
         Spark.get("/paneles/max_eficiencia/:brand", (request, response) -> {
-            try {
-                String brand = request.params(":brand");
-                Panel panel = panelDAO.getPanelMaxEfficiency(brand);
 
-                if (panel != null) {
-                    return gson.toJson(panel);
-                } else {
-                    response.status(404);
-                    return "Panel de la marca " + brand + " no encontrado";
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
+            String brand = request.params(":brand");
+            Panel panel = panelDAO.getPanelMaxEfficiency(brand);
+
+            if (panel != null) {
+                return gson.toJson(panel);
+            } else {
+                response.status(404);
+                return "Panel de la marca " + brand + " no encontrado";
             }
+
         });
 
         // Endpoint para buscar paneles por nombre
         Spark.get("/paneles/buscar/:model", (request, response) -> {
-            try {
-                String model = request.params(":model");
 
-                List<Panel> panels = panelDAO.findByModelLike(model);
+            String model = request.params(":model");
 
-                return gson.toJson(panels);
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
-            }
+            List<Panel> panels = panelDAO.findByModelLike(model);
+
+            return gson.toJson(panels);
+
         });
 
         // Endpoint para buscar paneles entre precios
         Spark.get("/paneles/buscar/:min/:max", (request, response) -> {
-            try {
-                Double min = Double.parseDouble(request.params(":min"));
-                Double max = Double.parseDouble(request.params(":max"));
 
-                List<Panel> panels = panelDAO.findBetweenPrices(min, max);
+            Double min = Double.parseDouble(request.params(":min"));
+            Double max = Double.parseDouble(request.params(":max"));
 
-                return gson.toJson(panels);
-            } catch (NumberFormatException e) {
-                response.status(400);
-                return "Error en el formato de los parámetros";
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
-            }
+            List<Panel> panels = panelDAO.findBetweenPrices(min, max);
+
+            return gson.toJson(panels);
+
         });
 
         // Endpoint para buscar paneles entre precios de una marca concreta
         Spark.get("/paneles/buscar/:min/:max/:brand", (request, response) -> {
-            try {
-                Double min = Double.parseDouble(request.params(":min"));
-                Double max = Double.parseDouble(request.params(":max"));
-                String brand = request.params(":brand");
 
-                List<Panel> panels = panelDAO.findBetweenBrandPrices(min, max, brand);
+            Double min = Double.parseDouble(request.params(":min"));
+            Double max = Double.parseDouble(request.params(":max"));
+            String brand = request.params(":brand");
 
-                return gson.toJson(panels);
-            } catch (NumberFormatException e) {
-                response.status(400);
-                return "Error en el formato de los parámetros";
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
-            }
+            List<Panel> panels = panelDAO.findBetweenBrandPrices(min, max, brand);
+
+            return gson.toJson(panels);
+
         });
 
         // ERROR
         // Endpoint para buscar paneles entre potencias de una categoría concreta
         Spark.get("/paneles/buscar/:min/:max/:category", (request, response) -> {
-            try {
-                Double min = Double.parseDouble(request.params(":min"));
-                Double max = Double.parseDouble(request.params(":max"));
-                String category = request.params(":category");
+            Double min = Double.parseDouble(request.params(":min"));
+            Double max = Double.parseDouble(request.params(":max"));
+            String category = request.params(":category");
 
-                List<Panel> panels = panelDAO.findBetweenCategoryPower(min, max, category);
+            List<Panel> panels = panelDAO.findBetweenCategoryPower(min, max, category);
 
-                return gson.toJson(panels);
-            } catch (NumberFormatException e) {
-                response.status(400);
-                return "Error en el formato de los parámetros";
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
-            }
+            return gson.toJson(panels);
         });
 
         // ERROR
         // Endpoint para buscar paneles entre precios de varias marcas
         Spark.get("/paneles/buscar/:min/:max/:listbrands", (request, response) -> {
-            try {
-                Double min = Double.parseDouble(request.params(":min"));
-                Double max = Double.parseDouble(request.params(":max"));
-                String brandsParam = request.params(":listbrands");
 
-                List<String> brands = Arrays.asList(brandsParam.split("-"));
+            Double min = Double.parseDouble(request.params(":min"));
+            Double max = Double.parseDouble(request.params(":max"));
+            String brandsParam = request.params(":listbrands");
 
-                List<Panel> panels = panelDAO.findBetweenBrandsPrices(min, max, brands);
-                return gson.toJson(panels);
-            } catch (NumberFormatException e) {
-                response.status(400);
-                return "Error en el formato de los parámetros";
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error interno del servidor";
-            }
+            List<String> brands = Arrays.asList(brandsParam.split("-"));
+
+            List<Panel> panels = panelDAO.findBetweenBrandsPrices(min, max, brands);
+            return gson.toJson(panels);
+
         });
 
 
