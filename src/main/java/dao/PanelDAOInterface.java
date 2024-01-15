@@ -1,7 +1,8 @@
 package dao;
 
 
-import dto.PanelDTO;
+import dto.panelDTO.PanelDTO;
+import dto.panelDTO.PanelModelProductionDTO;
 import entidades.Panel;
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface PanelDAOInterface {
     List<Panel> getMoreExpensive();
     List<String> getAllImages();
     List<PanelDTO> getImagesName();
-    List<PanelDTO> getModelsProduction();
+    List<PanelModelProductionDTO> getModelsProduction();
     Long totalPanels();
     Panel findById(Long id);
     Double avgPrices();
@@ -23,7 +24,7 @@ public interface PanelDAOInterface {
     List<Panel> findBetweenPrices(Double min, Double max);
     List<Panel> findBetweenBrandPrices(Double min, Double max, String brand);
     List<Panel> findBetweenCategoryPower(Double min, Double max, String category);
-    List<Panel> findBetweenBrandPrices(Double min, Double max, List<String> brands);
+    List<Panel> findBetweenBrandsPrices(Double min, Double max, List<String> brands);
     Panel create(Panel panel);
     Panel update(Panel panel);
     boolean deleteById(Long id);

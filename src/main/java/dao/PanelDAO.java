@@ -1,6 +1,7 @@
 package dao;
 
-import dto.PanelDTO;
+import dto.panelDTO.PanelDTO;
+import dto.panelDTO.PanelModelProductionDTO;
 import entidades.Panel;
 import org.hibernate.Session;
 import util.HibernateUtil;
@@ -57,17 +58,17 @@ public class PanelDAO implements PanelDAOInterface {
     public List<PanelDTO> getImagesName() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<PanelDTO> panels = session.createQuery("SELECT NEW dto.PanelDTO(p.model, p.image) FROM Panel p", PanelDTO.class).list();
+        List<PanelDTO> panels = session.createQuery("SELECT NEW dto.panelDTO.PanelDTO(p.model, p.image) FROM Panel p", PanelDTO.class).list();
         session.close();
 
         return panels;
     }
 
     @Override
-    public List<PanelDTO> getModelsProduction() {
+    public List<PanelModelProductionDTO> getModelsProduction() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<PanelDTO> panels = session.createQuery("SELECT NEW dto.PanelDTO(p.model, p.productionDate) FROM Panel p", PanelDTO.class).list();
+        List<PanelModelProductionDTO> panels = session.createQuery("SELECT NEW dto.panelDTO.PanelModelProductionDTO(p.model, p.productionDate) FROM Panel p", PanelModelProductionDTO.class).list();
         session.close();
 
         return panels;
@@ -100,7 +101,7 @@ public class PanelDAO implements PanelDAOInterface {
         Double average = session.createQuery("SELECT AVG(p.price) FROM Panel p", Double.class).getSingleResult();
         session.close();
 
-        return null;
+        return average;
     }
 
     @Override
@@ -167,7 +168,7 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> findBetweenPrices(Double min, Double max) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.price >= :min AND m.price <= :max", Panel.class);
+        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.price >= :min AND p.price <= :max", Panel.class);
         query.setParameter("min", min);
         query.setParameter("max", max);
 
@@ -208,13 +209,13 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     @Override
-    public List<Panel> findBetweenBrandPrices(Double min, Double max, List<String> brands) {
+    public List<Panel> findBetweenBrandsPrices(Double min, Double max, List<String> brands) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         Query<Panel> query = session.createQuery("FROM Panel p WHERE p.price >= :min AND p.price <= :max AND p.brand IN (:brands)", Panel.class);
         query.setParameter("min", min);
         query.setParameter("max", max);
-        query.setParameterList("brand", brands);
+        query.setParameterList("brands", brands);
 
         List<Panel> filter = query.list();
         session.close();

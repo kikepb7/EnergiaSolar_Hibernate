@@ -1,4 +1,4 @@
-package dto;
+package dto.panelDTO;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
