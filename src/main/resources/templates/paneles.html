@@ -38,7 +38,7 @@
             <td th:text="${panel.price} + ' €'"></td>
             <td>
                 <a class="btn btn-info editar-panel" th:href="'/paneles/editar/' + ${panel.id}">Editar</a>
-                <a class="btn btn-danger eliminar-panel">Eliminar</a>
+                <a class="btn btn-danger eliminar-panel" th:data-id="${panel.id}">Eliminar</a>
             </td>
         </tr>
         </tbody>

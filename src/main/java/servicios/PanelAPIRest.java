@@ -40,8 +40,8 @@ public class PanelAPIRest {
             return new ModelAndView(model, "paneles"); // resources/templates/
         }, new ThymeleafTemplateEngine());
 
-        // Endpoint para obtener todos los paneles disponibles en la BD
-        /*Spark.get("/paneles", (request, response) -> {
+        /*// Endpoint para obtener todos los paneles disponibles en la BD
+        Spark.get("/paneles", (request, response) -> {
            List<Panel> panels = panelDAO.getAllPanels();
            return gson.toJson(panels);
         });*/
@@ -213,6 +213,7 @@ public class PanelAPIRest {
         // ERROR
         // Endpoint para buscar paneles entre potencias de una categoría concreta
         Spark.get("/paneles/buscar/:min/:max/:category", (request, response) -> {
+
             Double min = Double.parseDouble(request.params(":min"));
             Double max = Double.parseDouble(request.params(":max"));
             String category = request.params(":category");
@@ -316,9 +317,9 @@ public class PanelAPIRest {
         Spark.notFound((request, response) -> {
             response.type("application/json");
             return "{\"error\": \"Ruta no encontrada\"," +
-                    "\"hint1\": \"/muebles\"," +
-                    "\"hint2\": \"/muebles/paginado/:pagina/:tam_pagina\"," +
-                    "\"hint3\": \"/muebles/id/:id\"}";
+                    "\"hint1\": \"/paneles\"," +
+                    "\"hint2\": \"/paneles/paginado/:page/:amount\"," +
+                    "\"hint3\": \"/paneles/id/:id\"}";
         });
 
 
