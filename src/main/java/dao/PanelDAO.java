@@ -198,18 +198,17 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> findBetweenCategoryPower(Integer min, Integer max, String category) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List<Panel> filter = new ArrayList<>();
+
         try {
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.nominalPower >= :min AND p.nominalPower <= :max AND p.category = :category", Panel.class);
-        query.setParameter("min", min);
-        query.setParameter("max", max);
-        query.setParameter("category", category);
+            Query<Panel> query = session.createQuery("FROM Panel p WHERE p.nominalPower >= :min AND p.nominalPower <= :max AND p.category = :category", Panel.class);
+            query.setParameter("min", min);
+            query.setParameter("max", max);
+            query.setParameter("category", category);
 
-        filter = query.list();
-        System.out.println(filter);
-        session.close();
-
+            filter = query.list();
+            System.out.println(filter);
+            session.close();
         }catch (Exception e) {
-//            e.printStackTrace();
             System.out.println(e.getMessage());
         }
 

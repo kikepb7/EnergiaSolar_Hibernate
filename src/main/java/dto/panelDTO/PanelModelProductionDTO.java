@@ -6,6 +6,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 public class PanelModelProductionDTO {
+
     // 1. Attributes
     @Getter @Setter
     private String model;

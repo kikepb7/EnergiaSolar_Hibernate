@@ -1,6 +1,5 @@
 package dao;
 
-
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.PanelModelProductionDTO;
 import entidades.Panel;

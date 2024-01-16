@@ -29,8 +29,25 @@ public class PanelAPIRest {
         panelDAO = implementation;
 
         /* GET */
+        // /paneles
+        // /paneles/buscarID/:id
+        // /paneles/buscar/:model
+        // /paneles/buscar_varias/:min/:max/:listbrands
+        // /paneles/produced_on/{date} (OBTENER PANELES PRODUCIDOS EN UNA FECHA ESPECÍFICA)
+        // /paneles/mas-eficiente (OBTENER EL PANEL MÁS EFICIENTE)
+        // /paneles/ordenado-por-potencia (OBTENER LOS PANELES ORDENADOS POR POTENCIA)
+        // /paneles/por-marca (OBTENER LOS PANELES DE UNA MARCA)
+        // /paneles/media-eficiencia (OBTENER LA EFICIENCIA PROMEDIO DE TODOS LOS PANELES DE UNA MARCA)
+        // /paneles/menos-precio (OBTENER LOS PANELES POR DEBAJO DE UN PRECIO)
+        // /paneles/media-precio (OBTENER LA MEDIA DE PRECIO DE LOS PANELES)
+        // /panels/totales (OBTENER CANTIDAD TOTAL DE PANELES)
+        // /paneles/precio-minimo (OBTENER PRECIO MÍNIMO DE LOS PANELES)
+        // /paneles/precio-maximo (OBTENER EL PRECIO MÁXIMO DE LOS PANELES)
+
+
+
         // Endpoint para la página de inicio
-        Spark.get("/paneles", (request, response) -> {
+        Spark.get("/paneles_procesados", (request, response) -> {
             List<Panel> panels = panelDAO.getAllPanels();
 
             Map<String, Object> model = new HashMap<>();
@@ -39,11 +56,12 @@ public class PanelAPIRest {
             return new ModelAndView(model, "paneles"); // resources/templates/
         }, new ThymeleafTemplateEngine());
 
-        /*// Endpoint para obtener todos los paneles disponibles en la BD
+
+        // Endpoint para obtener todos los paneles disponibles en la BD
         Spark.get("/paneles", (request, response) -> {
            List<Panel> panels = panelDAO.getAllPanels();
            return gson.toJson(panels);
-        });*/
+        });
 
         // Endpoint para obtener los paneles más caros disponibles en la BD
         Spark.get("/paneles/mas_caros", (request, response) -> {
