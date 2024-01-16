@@ -300,9 +300,22 @@ public class PanelAPIRest {
         Spark.notFound((request, response) -> {
             response.type("application/json");
             return "{\"error\": \"Ruta no encontrada\"," +
-                    "\"hint1\": \"/paneles\"," +
-                    "\"hint2\": \"/paneles/paginado/:page/:amount\"," +
-                    "\"hint3\": \"/paneles/id/:id\"}";
+                    "\"hint 1\": \"/paneles\"," +
+                    "\"hint 2\": \"/paneles/resumen\"," +
+                    "\"hint 3\": \"/paneles/imagenes\"," +
+                    "\"hint 4\": \"/paneles/mas_caros\"," +
+                    "\"hint 5\": \"/paneles/buscarID/:id\"," +
+                    "\"hint 6\": \"/paneles/buscar/:model\"," +
+                    "\"hint 7\": \"/paneles/media_precios\"," +
+                    "\"hint 8\": \"/paneles/buscar/:min/:max\"," +
+                    "\"hint 9\": \"/paneles/fabricacion/:year\"," +
+                    "\"hint 10\": \"/paneles/modelos_fabricacion\"," +
+                    "\"hint 11\": \"/paneles/media_precios/:brand\"," +
+                    "\"hint 12\": \"/paneles/max_eficiencia/:brand\"," +
+                    "\"hint 13\": \"/paneles/paginado/:page/:amount\"," +
+                    "\"hint 14\": \"/paneles/buscar/:min/:max/:brand\"," +
+                    "\"hint 15\": \"/paneles/buscar/potencia/:min/:max/:category\"," +
+                    "\"hint 16\": \"/paneles/buscar_varias/:min/:max/:listbrands\"}";
         });
 
 

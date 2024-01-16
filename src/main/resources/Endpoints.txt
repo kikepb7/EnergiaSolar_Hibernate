@@ -22,8 +22,8 @@
 /paneles/por_marca
 /paneles/mas_eficiente
 /paneles/ordenado_por_potencia
-/paneles/media-eficiencia (TODOS LOS PANELES)
+/paneles/media_eficiencia (TODOS LOS PANELES)
 /paneles/mas_baratos
 /paneles/totales (cantidad de paneles en la BD)
-/paneles/precio-minimo (PRECIO MÍNIMO DE LOS PANELES)
-/paneles/precio-maximo (PRECIO MÍNIMO DE LOS PANELES)
+/paneles/precio_minimo (PRECIO MÍNIMO DE LOS PANELES)
+/paneles/precio_maximo (PRECIO MÍNIMO DE LOS PANELES)
