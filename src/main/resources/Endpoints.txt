@@ -1,0 +1,29 @@
+- Mostrar paneles: /paneles
+- Mostrar imágenes de los paneles: /paneles/imagenes
+- Mostrar paneles más caros: /paneles/mas_caros
+- Resumen con modelo e imagen: /paneles/resumen
+- Resumen con modelos y fecha de fabricación: /paneles/modelos_fabricacion
+- Buscar por su ID: /paneles/buscarID/:id
+- Buscar paneles por modelo: /paneles/buscar/:model
+- Calcular media de precios: /paneles/media_precios
+- Calcular media de precios de una marca: /paneles/media_precios/:brand
+- Mostrar paneles de un año concreto: /paneles/fabricacion/:year
+- Obtener el panel con máxima eficiencia de una marca concreta: /paneles/max_eficiencia/:brand
+- Mostrar paneles entre precios: /paneles/buscar/:min/:max
+- Mostrar paneles entre precios de una marca concreta: /paneles/buscar/:min/:max/:brand
+- Mostrar paneles entre potencias de una categoria concreta: /paneles/buscar/potencia/:min/:max/:category
+- Mostrar paneles entre precios de varias marcas: /paneles/buscar_varias/:min/:max/:listbrands
+- Crear: /paneles/registrar
+- Modificar: /paneles/editar/:id
+- Borrar: /paneles/:id
+
+----
+
+/paneles/por_marca
+/paneles/mas_eficiente
+/paneles/ordenado_por_potencia
+/paneles/media-eficiencia (TODOS LOS PANELES)
+/paneles/mas_baratos
+/paneles/totales (cantidad de paneles en la BD)
+/paneles/precio-minimo (PRECIO MÍNIMO DE LOS PANELES)
+/paneles/precio-maximo (PRECIO MÍNIMO DE LOS PANELES)
