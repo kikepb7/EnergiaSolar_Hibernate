@@ -74,7 +74,7 @@
                            autofocus="autofocus">
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-success" onClick="registerPanel()" href="paneles.html">Registrar</button>
+                    <button type="submit" class="btn btn-success" onClick="registerPanel()" th:href="'paneles.html'">Registrar</button>
                 </div>
             </form>
         </div>
@@ -109,7 +109,7 @@ async function registerPanel() {
         body: JSON.stringify(datos)       // Coge cualquier objeto de JS y lo convierte a un String de JSON
       });
 
-      window.location.href = 'paneles.html';
+<!--      window.location.href = 'paneles.html';-->
 
     }
 </script>

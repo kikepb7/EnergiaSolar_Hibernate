@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 public class PanelAPIRest {
     private final PanelDAOInterface panelDAO;
     private final Gson gson = new GsonBuilder()
@@ -210,12 +209,11 @@ public class PanelAPIRest {
 
         });
 
-        // ERROR
         // Endpoint para buscar paneles entre potencias de una categoría concreta
-        Spark.get("/paneles/buscar/:min/:max/:category", (request, response) -> {
+        Spark.get("/paneles/buscar/potencia/:min/:max/:category", (request, response) -> {
 
-            Double min = Double.parseDouble(request.params(":min"));
-            Double max = Double.parseDouble(request.params(":max"));
+            Integer min = Integer.parseInt(request.params(":min"));
+            Integer max = Integer.parseInt(request.params(":max"));
             String category = request.params(":category");
 
             List<Panel> panels = panelDAO.findBetweenCategoryPower(min, max, category);
@@ -223,9 +221,8 @@ public class PanelAPIRest {
             return gson.toJson(panels);
         });
 
-        // ERROR
         // Endpoint para buscar paneles entre precios de varias marcas
-        Spark.get("/paneles/buscar/:min/:max/:listbrands", (request, response) -> {
+        Spark.get("/paneles/buscar_varias/:min/:max/:listbrands", (request, response) -> {
 
             Double min = Double.parseDouble(request.params(":min"));
             Double max = Double.parseDouble(request.params(":max"));
@@ -235,7 +232,6 @@ public class PanelAPIRest {
 
             List<Panel> panels = panelDAO.findBetweenBrandsPrices(min, max, brands);
             return gson.toJson(panels);
-
         });
 
 
@@ -265,7 +261,7 @@ public class PanelAPIRest {
 
 
 
-        /* PUT */
+        // PUT
         // Endpoint para actualizar un panel por su ID
         Spark.put("paneles/editar/:id", (request, response) -> {
             Long id = Long.parseLong(request.params(":id"));
@@ -290,7 +286,7 @@ public class PanelAPIRest {
             if (panel != null) {
                 Map<String, Object> model = new HashMap<>();
                 model.put("panel", panel);
-                return new ModelAndView(model, "editar.html");
+                return new ModelAndView(model, "editar");
             } else {
                 response.status(404);
                 return null;

@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import util.HibernateUtil;
 import org.hibernate.query.Query;
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PanelDAO implements PanelDAOInterface {
@@ -194,16 +195,23 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     @Override
-    public List<Panel> findBetweenCategoryPower(Double min, Double max, String category) {
+    public List<Panel> findBetweenCategoryPower(Integer min, Integer max, String category) {
         Session session = HibernateUtil.getSessionFactory().openSession();
-
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.nominal_power >= :min AND p.nominal_power <= :max AND p.category = :category", Panel.class);
+        List<Panel> filter = new ArrayList<>();
+        try {
+        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.nominalPower >= :min AND p.nominalPower <= :max AND p.category = :category", Panel.class);
         query.setParameter("min", min);
         query.setParameter("max", max);
         query.setParameter("category", category);
 
-        List<Panel> filter = query.list();
+        filter = query.list();
+        System.out.println(filter);
         session.close();
+
+        }catch (Exception e) {
+//            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
 
         return filter;
     }

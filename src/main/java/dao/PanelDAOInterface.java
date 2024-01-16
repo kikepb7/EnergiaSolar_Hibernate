@@ -23,7 +23,7 @@ public interface PanelDAOInterface {
     List<Panel> findByCategoryLike(String category);
     List<Panel> findBetweenPrices(Double min, Double max);
     List<Panel> findBetweenBrandPrices(Double min, Double max, String brand);
-    List<Panel> findBetweenCategoryPower(Double min, Double max, String category);
+    List<Panel> findBetweenCategoryPower(Integer min, Integer max, String category);
     List<Panel> findBetweenBrandsPrices(Double min, Double max, List<String> brands);
     Panel create(Panel panel);
     Panel update(Panel panel);

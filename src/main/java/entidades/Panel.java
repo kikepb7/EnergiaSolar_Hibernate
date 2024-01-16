@@ -19,27 +19,35 @@ public class Panel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
     private Long id;
+
     @Column(name = "brand", nullable = false)
     @Getter @Setter
     private String brand;
+
     @Column(name = "category")
     @Getter @Setter
     private String category;
+
     @Column(name = "production_date")
     @Getter @Setter
     private LocalDate productionDate;
+
     @Column(name = "efficiency")
     @Getter @Setter
     private String efficiency;
+
     @Column(name = "image")
     @Getter @Setter
     private String image;
+
     @Column(name = "model", unique = true, nullable = false)
     @Getter @Setter
     private String model;
+
     @Column(name = "nominal_power")
     @Getter @Setter
     private int nominalPower;
+
     @Column(name = "price", nullable = false)
     @Getter @Setter
     private double price;
