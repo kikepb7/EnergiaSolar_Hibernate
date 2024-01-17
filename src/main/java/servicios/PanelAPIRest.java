@@ -42,12 +42,15 @@ public class PanelAPIRest {
 
         // Obtener todos los paneles disponibles en la BD
         Spark.get("/paneles", (request, response) -> {
+            response.type("application/json");
             List<Panel> panels = panelDAO.getAllPanels();
             return gson.toJson(panels);
         });
 
         // Obtener las imágenes de los paneles disponibles en la BD
         Spark.get("/paneles/imagenes", (request, response) -> {
+
+            response.type("application/json");
 
             List<String> images = panelDAO.getAllImages();
 
@@ -62,6 +65,8 @@ public class PanelAPIRest {
         // Obtener los paneles más caros disponibles en la BD
         Spark.get("/paneles/mas_caros", (request, response) -> {
 
+            response.type("application/json");
+
             List<Panel> moreExpensive = panelDAO.getMoreExpensive();
 
             if (moreExpensive != null && !moreExpensive.isEmpty()) {
@@ -74,6 +79,8 @@ public class PanelAPIRest {
 
         // Obtener un resumen con solo el modelo y la imagen
         Spark.get("/paneles/resumen", (request, response) -> {
+
+            response.type("application/json");
 
             List<PanelDTO> resume = panelDAO.getImagesName();
 
@@ -88,6 +95,8 @@ public class PanelAPIRest {
         // Obtener un resumen con los modelos y la fecha de fabricación
         Spark.get("/paneles/modelos_fabricacion", (request, response) -> {
 
+            response.type("application/json");
+
             List<PanelModelProductionDTO> resume = panelDAO.getModelsProduction();
 
             if (resume != null && !resume.isEmpty()) {
@@ -100,6 +109,8 @@ public class PanelAPIRest {
 
         // Obtener un panel por su ID
         Spark.get("/paneles/buscarID/:id", (request, response) -> {
+
+            response.type("application/json");
 
             Long id = Long.parseLong(request.params(":id"));
             Panel panel = panelDAO.findById(id);
@@ -115,6 +126,8 @@ public class PanelAPIRest {
         // Buscar paneles por modelo
         Spark.get("/paneles/buscar/:model", (request, response) -> {
 
+            response.type("application/json");
+
             String model = request.params(":model");
 
             List<Panel> panels = panelDAO.findByModelLike(model);
@@ -124,6 +137,8 @@ public class PanelAPIRest {
 
         // Calcular la media de precios de los paneles
         Spark.get("/paneles/media_precios", (request, response) -> {
+
+            response.type("application/json");
 
             Double average = panelDAO.avgPrices();
 
@@ -137,6 +152,8 @@ public class PanelAPIRest {
 
         // Calcular la media de precios de los paneles de una marca concreta
         Spark.get("/paneles/media_precios/:brand", (request, response) -> {
+
+            response.type("application/json");
 
             String brand = request.params(":brand");
 
@@ -153,6 +170,8 @@ public class PanelAPIRest {
         // Obtener los paneles de un año de fabricación concreto
         Spark.get("/paneles/fabricacion/:year", (request, response) -> {
 
+            response.type("application/json");
+
             int year = Integer.parseInt(request.params(":year"));
 
             List<Panel> panels = panelDAO.getPanelsByMaxProductionYear(year);
@@ -162,6 +181,8 @@ public class PanelAPIRest {
 
         // Obtener el panel con máxima eficiencia de una marca concreta
         Spark.get("/paneles/max_eficiencia/:brand", (request, response) -> {
+
+            response.type("application/json");
 
             String brand = request.params(":brand");
             Panel panel = panelDAO.getPanelMaxEfficiency(brand);
@@ -177,6 +198,8 @@ public class PanelAPIRest {
         // Buscar paneles entre precios
         Spark.get("/paneles/buscar/:min/:max", (request, response) -> {
 
+            response.type("application/json");
+
             Double min = Double.parseDouble(request.params(":min"));
             Double max = Double.parseDouble(request.params(":max"));
 
@@ -187,6 +210,8 @@ public class PanelAPIRest {
 
         // Buscar paneles entre precios de una marca concreta
         Spark.get("/paneles/buscar/:min/:max/:brand", (request, response) -> {
+
+            response.type("application/json");
 
             Double min = Double.parseDouble(request.params(":min"));
             Double max = Double.parseDouble(request.params(":max"));
@@ -200,6 +225,8 @@ public class PanelAPIRest {
         // Buscar paneles entre potencias de una categoría concreta
         Spark.get("/paneles/buscar/potencia/:min/:max/:category", (request, response) -> {
 
+            response.type("application/json");
+
             Integer min = Integer.parseInt(request.params(":min"));
             Integer max = Integer.parseInt(request.params(":max"));
             String category = request.params(":category");
@@ -211,6 +238,8 @@ public class PanelAPIRest {
 
         // Buscar paneles entre precios de varias marcas
         Spark.get("/paneles/buscar_varias/:min/:max/:listbrands", (request, response) -> {
+
+            response.type("application/json");
 
             Double min = Double.parseDouble(request.params(":min"));
             Double max = Double.parseDouble(request.params(":max"));
@@ -237,6 +266,7 @@ public class PanelAPIRest {
         });
 
         Spark.get("paneles/registrar", (request, response) -> {
+
             List<Panel> panels = panelDAO.getAllPanels();
             Panel panel = new Panel();
 
@@ -251,6 +281,7 @@ public class PanelAPIRest {
         // PUT
         // Endpoint para actualizar un panel por su ID
         Spark.put("paneles/editar/:id", (request, response) -> {
+
             Long id = Long.parseLong(request.params(":id"));
             String body = request.body();
 
@@ -267,6 +298,7 @@ public class PanelAPIRest {
         });
 
         Spark.get("/paneles/editar/:id", (request, response) -> {
+
             Long id = Long.parseLong(request.params(":id"));
             Panel panel = panelDAO.findById(id);
 
@@ -321,6 +353,9 @@ public class PanelAPIRest {
 
         /* PAGINACIÓN DE DATOS DE TODOS LOS PANELES */
         Spark.get("/paneles/paginado/:page/:amount", (request, response) -> {
+
+            response.type("application/json");
+
             Integer page = Integer.parseInt(request.params("page"));
             Integer amount = Integer.parseInt(request.params("amount"));
 

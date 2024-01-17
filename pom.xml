@@ -83,5 +83,7 @@
             <artifactId>json-transformer</artifactId>
             <version>0.1.0</version>
         </dependency>
+
+<!--        SECURITY-->
     </dependencies>
 </project>
