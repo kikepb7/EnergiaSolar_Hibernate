@@ -20,6 +20,10 @@ public class Panel implements Serializable {
     @Getter @Setter
     private Long id;
 
+    /*@Column(name = "serial_code", nullable = false)
+    @Getter @Setter
+    private String serialCode;*/
+
     @Column(name = "brand", nullable = false)
     @Getter @Setter
     private String brand;

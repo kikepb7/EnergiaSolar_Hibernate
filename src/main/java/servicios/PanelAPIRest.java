@@ -7,17 +7,29 @@ import dao.PanelDAOInterface;
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.PanelModelProductionDTO;
 import entidades.Panel;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import spark.Filter;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.Key;
+import java.time.*;
+import java.util.*;
+
+import static spark.Spark.halt;
+import static spark.route.HttpMethod.before;
 
 public class PanelAPIRest {
+    // JWT
+    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final String ISSUER = "prueba";
+    private static final long EXPIRATION_HOURS = 24;
+
+    // Atributtes
     private final PanelDAOInterface panelDAO;
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
@@ -27,6 +39,42 @@ public class PanelAPIRest {
     public PanelAPIRest(PanelDAOInterface implementation) {
         Spark.port(8080);
         panelDAO = implementation;
+
+        Spark.get("/token", (request, response) -> {
+            try {
+                Map<String, Object> claims = new HashMap<>();
+                claims.put("usuario", "nombre_usuario");
+
+                String token = createJWT();
+                return token;
+            } catch (Exception e) {
+                e.printStackTrace();
+                response.status(500);
+                return "Error al generar el token: " + e.getMessage();
+            }
+        });
+
+        Spark.before("/paneles", (request, response) -> {
+            System.out.println("Cabeceras de la solicitud: " + request.headers());
+
+            String token = request.headers("Authorization");
+            System.out.println("Token recibido: " + token);
+
+            if (token == null || token.trim().isEmpty()) {
+                halt(401, "Acceso no autorizado");
+            }
+
+            // Remove the "Bearer " prefix
+            if (token.startsWith("Bearer ")) {
+                token = token.substring("Bearer ".length());
+            }
+
+            token = token.trim(); // Ensure there are no extra spaces
+
+            if (!isValidJWT(token)) {
+                halt(401, "Acceso no autorizado");
+            }
+        });
 
         /* GET */
         // Página de inicio
@@ -41,11 +89,12 @@ public class PanelAPIRest {
 
 
         // Obtener todos los paneles disponibles en la BD
-        Spark.get("/paneles", (request, response) -> {
-            response.type("application/json");
-            List<Panel> panels = panelDAO.getAllPanels();
-            return gson.toJson(panels);
-        });
+//        Spark.get("/paneles", (request, response) -> {
+//
+//            response.type("application/json");
+//            List<Panel> panels = panelDAO.getAllPanels();
+//            return gson.toJson(panels);
+//        });
 
         // Obtener las imágenes de los paneles disponibles en la BD
         Spark.get("/paneles/imagenes", (request, response) -> {
@@ -365,5 +414,29 @@ public class PanelAPIRest {
 
             return gson.toJson(pageResult);
         });
+    }
+
+    private static String createJWT() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime expiration = now.plusHours(EXPIRATION_HOURS);
+
+        Date expirationDate = Date.from(expiration.atZone(ZoneId.systemDefault()).toInstant());
+
+        return Jwts.builder()
+                .setIssuer(ISSUER)
+                .setIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
+                .setExpiration(expirationDate)
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
+    private static boolean isValidJWT(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            System.out.println("Error al validar el token: " + e.getMessage());
+            return false;
+        }
     }
 }
