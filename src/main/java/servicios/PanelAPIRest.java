@@ -3,34 +3,33 @@ package servicios;
 import com.appslandia.common.gson.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dao.APIKeyDAOInterface;
 import dao.PanelDAOInterface;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.PanelModelProductionDTO;
 import entidades.Panel;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import spark.Filter;
+import entidades.Token;
+import org.hibernate.Session;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
+import util.HibernateUtil;
 
-import java.security.Key;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import java.time.*;
 import java.util.*;
 
 import static spark.Spark.halt;
-import static spark.route.HttpMethod.before;
 
 public class PanelAPIRest {
-    // JWT
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private static final String ISSUER = "prueba";
-    private static final long EXPIRATION_HOURS = 24;
 
     // Atributtes
     private final PanelDAOInterface panelDAO;
+//    private final APIKeyDAOInterface apiKeyDAO;
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
@@ -40,43 +39,16 @@ public class PanelAPIRest {
         Spark.port(8080);
         panelDAO = implementation;
 
-        Spark.get("/token", (request, response) -> {
-            try {
-                Map<String, Object> claims = new HashMap<>();
-                claims.put("usuario", "nombre_usuario");
-
-                String token = createJWT();
-                return token;
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.status(500);
-                return "Error al generar el token: " + e.getMessage();
-            }
-        });
-
-        Spark.before("/paneles", (request, response) -> {
-            System.out.println("Cabeceras de la solicitud: " + request.headers());
-
-            String token = request.headers("Authorization");
-            System.out.println("Token recibido: " + token);
-
-            if (token == null || token.trim().isEmpty()) {
-                halt(401, "Acceso no autorizado");
-            }
-
-            // Remove the "Bearer " prefix
-            if (token.startsWith("Bearer ")) {
-                token = token.substring("Bearer ".length());
-            }
-
-            token = token.trim(); // Ensure there are no extra spaces
-
-            if (!isValidJWT(token)) {
-                halt(401, "Acceso no autorizado");
-            }
-        });
-
         /* GET */
+        // Protección con Token
+        Spark.before( (request, response) -> {
+            String apiKey = request.headers("APIKEY");
+            System.out.println(apiKey);
+            if (apiKey == null && !validateAPIKEY(apiKey)){
+                Spark.halt(401,"Unauthorized access");
+            }
+        });
+
         // Página de inicio
         Spark.get("/paneles_procesados", (request, response) -> {
             List<Panel> panels = panelDAO.getAllPanels();
@@ -86,7 +58,6 @@ public class PanelAPIRest {
 
             return new ModelAndView(model, "paneles"); // resources/templates/
         }, new ThymeleafTemplateEngine());
-
 
         // Obtener todos los paneles disponibles en la BD
 //        Spark.get("/paneles", (request, response) -> {
@@ -416,26 +387,40 @@ public class PanelAPIRest {
         });
     }
 
-    private static String createJWT() {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expiration = now.plusHours(EXPIRATION_HOURS);
+    /*private boolean validateAPIKey(String apiKey) {
+        APIKey token = APIKeyDAO.createAPIKey(apiKey);
+        return key != null && key.isActiva() && key.getNumUsos() > 0;
+    }*/
 
-        Date expirationDate = Date.from(expiration.atZone(ZoneId.systemDefault()).toInstant());
+    private boolean validateAPIKEY(String apiKey) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
 
-        return Jwts.builder()
-                .setIssuer(ISSUER)
-                .setIssuedAt(Date.from(now.atZone(ZoneId.systemDefault()).toInstant()))
-                .setExpiration(expirationDate)
-                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    private static boolean isValidJWT(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(SECRET_KEY).build().parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            System.out.println("Error al validar el token: " + e.getMessage());
+            session.beginTransaction();
+
+            Query query = session.createQuery("SELECT t FROM Token t WHERE t.apikey = :apikey", Token.class);
+            query.setParameter("apikey", apiKey);
+
+            Token token;
+            try {
+                token = (Token) query.getSingleResult();
+
+
+            } catch (NoResultException e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            boolean isValid = (token != null) && token.isActive();
+
+            session.getTransaction().commit();
+            session.close();
+
+            return isValid;
+
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
             return false;
         }
     }
