@@ -3,33 +3,30 @@ package servicios;
 import com.appslandia.common.gson.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dao.APIKeyDAOInterface;
 import dao.PanelDAOInterface;
-import de.mkammerer.argon2.Argon2;
-import de.mkammerer.argon2.Argon2Factory;
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.PanelModelProductionDTO;
 import entidades.Panel;
 import entidades.Token;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 import util.HibernateUtil;
-
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
-import javax.persistence.Query;
-import java.time.*;
-import java.util.*;
-
-import static spark.Spark.halt;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PanelAPIRest {
 
     // Atributtes
     private final PanelDAOInterface panelDAO;
-//    private final APIKeyDAOInterface apiKeyDAO;
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
@@ -41,11 +38,14 @@ public class PanelAPIRest {
 
         /* GET */
         // Protección con Token
-        Spark.before( (request, response) -> {
-            String apiKey = request.headers("APIKEY");
+        Spark.before("paneles/*", (request, response) -> {
+            String apiKey = request.headers("token");
             System.out.println(apiKey);
-            if (apiKey == null && !validateAPIKEY(apiKey)){
-                Spark.halt(401,"Unauthorized access");
+            if (apiKey == null) {
+                Spark.halt(401, "Unauthorized access");
+            }
+            if (!validateAPIKey(apiKey)) {
+                Spark.halt(401, "Unauthorized access");
             }
         });
 
@@ -392,20 +392,18 @@ public class PanelAPIRest {
         return key != null && key.isActiva() && key.getNumUsos() > 0;
     }*/
 
-    private boolean validateAPIKEY(String apiKey) {
+    private boolean validateAPIKey(String apiKey) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
             session.beginTransaction();
 
-            Query query = session.createQuery("SELECT t FROM Token t WHERE t.apikey = :apikey", Token.class);
+            Query<Token> query = session.createQuery("SELECT t FROM Token t WHERE t.apikey = :apikey", Token.class);
             query.setParameter("apikey", apiKey);
 
             Token token;
             try {
-                token = (Token) query.getSingleResult();
-
-
+                token = query.getSingleResult();
             } catch (NoResultException e) {
                 e.printStackTrace();
                 return false;
@@ -418,10 +416,16 @@ public class PanelAPIRest {
 
             return isValid;
 
-        } catch (PersistenceException e) {
-            e.printStackTrace();
-            session.getTransaction().rollback();
+        } catch (HibernateException e) {
+            if (session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
             return false;
+
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
         }
     }
 }

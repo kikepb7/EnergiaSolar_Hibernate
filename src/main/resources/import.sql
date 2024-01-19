@@ -50,7 +50,7 @@ INSERT INTO panel(brand, category, efficiency, image, model, nominal_power, pric
 --INSERT INTO token(allowDelete, allowRead, allowUpdate, apikey, isActive, uses) VALUES(1, 1, 1, '', 1, 20);
 --INSERT INTO token(allowDelete, allowRead, allowUpdate, apikey, isActive, uses) VALUES(1, 1, 1, '', 1, 20);
 --INSERT INTO token(allowDelete, allowRead, allowUpdate, apikey, isActive, uses) VALUES(1, 1, 1, '', 1, 20);
-AIzaSy9DaGmWKa4Js3XZHjGw7ISLn3bamBGewQe
-AIzaSy9DaGmWKa4Js3XZHjGw7ISLnsRWScfghfr
-AIzaSy9dfhodjghkddXZHjGw7ISLn3bafdagdQe
-AIzaSy9dfhodjghkddXZHjGw7ISLn3bamSFewQe
+--AIzaSy9DaGmWKa4Js3XZHjGw7ISLn3bamBGewQe
+--AIzaSy9DaGmWKa4Js3XZHjGw7ISLnsRWScfghfr
+--AIzaSy9dfhodjghkddXZHjGw7ISLn3bafdagdQe
+--AIzaSy9dfhodjghkddXZHjGw7ISLn3bamSFewQe
