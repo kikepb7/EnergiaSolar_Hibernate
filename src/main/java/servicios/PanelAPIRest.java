@@ -3,20 +3,17 @@ package servicios;
 import com.appslandia.common.gson.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dao.security.APIKeyDAO;
+import dao.security.APIKeyDAOInterface;
 import dao.PanelDAOInterface;
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.PanelModelProductionDTO;
 import entidades.Panel;
 import entidades.Token;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.query.Query;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
-import util.HibernateUtil;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
+
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,24 +24,26 @@ public class PanelAPIRest {
 
     // Atributtes
     private final PanelDAOInterface panelDAO;
+    private final APIKeyDAOInterface tokenDAO;
+
     private final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
             .create();
 
-    public PanelAPIRest(PanelDAOInterface implementation) {
+
+    // Constructor
+    public PanelAPIRest(PanelDAOInterface implementation, APIKeyDAOInterface impl) {
         Spark.port(8080);
         panelDAO = implementation;
+        tokenDAO = impl;
 
         /* GET */
         // Protección con Token
         Spark.before("paneles/*", (request, response) -> {
-            String apiKey = request.headers("token");
+            String apiKey = request.headers("token");   // Valor de Key en Postman
             System.out.println(apiKey);
-            if (apiKey == null) {
-                Spark.halt(401, "Unauthorized access");
-            }
-            if (!validateAPIKey(apiKey)) {
+            if (apiKey == null || !tokenDAO.validateAPIKey(apiKey)) {
                 Spark.halt(401, "Unauthorized access");
             }
         });
@@ -60,12 +59,12 @@ public class PanelAPIRest {
         }, new ThymeleafTemplateEngine());
 
         // Obtener todos los paneles disponibles en la BD
-//        Spark.get("/paneles", (request, response) -> {
-//
-//            response.type("application/json");
-//            List<Panel> panels = panelDAO.getAllPanels();
-//            return gson.toJson(panels);
-//        });
+        Spark.get("/paneles", (request, response) -> {
+
+            response.type("application/json");
+            List<Panel> panels = panelDAO.getAllPanels();
+            return gson.toJson(panels);
+        });
 
         // Obtener las imágenes de los paneles disponibles en la BD
         Spark.get("/paneles/imagenes", (request, response) -> {
@@ -298,6 +297,7 @@ public class PanelAPIRest {
         }, new ThymeleafTemplateEngine());
 
 
+
         // PUT
         // Endpoint para actualizar un panel por su ID
         Spark.put("paneles/editar/:id", (request, response) -> {
@@ -331,6 +331,7 @@ public class PanelAPIRest {
                 return null;
             }
         }, new ThymeleafTemplateEngine());
+
 
 
         /* DELETE */
@@ -385,47 +386,25 @@ public class PanelAPIRest {
 
             return gson.toJson(pageResult);
         });
-    }
 
-    /*private boolean validateAPIKey(String apiKey) {
-        APIKey token = APIKeyDAO.createAPIKey(apiKey);
-        return key != null && key.isActiva() && key.getNumUsos() > 0;
-    }*/
 
-    private boolean validateAPIKey(String apiKey) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
 
-        try {
-            session.beginTransaction();
+        /* APIKEYS */
+        // Crear nuevos tokens de verificación
+        Spark.post("/crear_token", (request, response) -> {
+            String body = request.body();
+            Token newToken = gson.fromJson(body, Token.class);
 
-            Query<Token> query = session.createQuery("SELECT t FROM Token t WHERE t.apikey = :apikey", Token.class);
-            query.setParameter("apikey", apiKey);
+            Token created = tokenDAO.createAPIKey(newToken);
 
-            Token token;
-            try {
-                token = query.getSingleResult();
-            } catch (NoResultException e) {
-                e.printStackTrace();
-                return false;
-            }
+            return gson.toJson(created);
+        });
 
-            boolean isValid = (token != null) && token.isActive();
-
-            session.getTransaction().commit();
-            session.close();
-
-            return isValid;
-
-        } catch (HibernateException e) {
-            if (session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
-            return false;
-
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
+        // Mostrar todos los tokens actuales y su situación
+        Spark.get("/tokens_actuales", (request, response) -> {
+            response.type("application/json");
+            List<Token> tokens = tokenDAO.getAllTokens();
+            return gson.toJson(tokens);
+        });
     }
 }
