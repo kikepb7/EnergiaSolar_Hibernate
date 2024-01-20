@@ -10,5 +10,7 @@ public interface APIKeyDAOInterface {
     Token createAPIKey(Token token);
     Token update(Token token);
     boolean deleteById(Long id);
+//    Token findByAPIKey(String apiKey);
     boolean validateAPIKey(String apiKey);
+//    boolean validateAPIKey(String apikey, String path);
 }

@@ -19,7 +19,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> getAllPanels() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<Panel> allPanels = session.createQuery("FROM Panel", Panel.class).list();
+        List<Panel> allPanels = session.createQuery(
+                "FROM Panel", Panel.class).list();
         session.close();
 
         return allPanels;
@@ -35,7 +36,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> getAll(int page, int amount) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel", Panel.class);
+        Query<Panel> query = session.createQuery(
+                "FROM Panel", Panel.class);
         query.setMaxResults(amount);
         query.setFirstResult((page - 1) * amount);
         List<Panel> allPanels = query.list();
@@ -53,7 +55,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> getMoreExpensive() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<Panel> moreExpensive = session.createQuery("FROM Panel p WHERE p.price > 200", Panel.class).list();
+        List<Panel> moreExpensive = session.createQuery(
+                "FROM Panel p WHERE p.price > 200", Panel.class).list();
         session.close();
 
         return moreExpensive;
@@ -67,7 +70,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<String> getAllImages() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<String> images = session.createQuery("SELECT p.image FROM Panel p", String.class).list();
+        List<String> images = session.createQuery(
+                "SELECT p.image FROM Panel p", String.class).list();
         session.close();
 
         return images;
@@ -81,21 +85,26 @@ public class PanelDAO implements PanelDAOInterface {
     public List<PanelDTO> getImagesName() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<PanelDTO> panels = session.createQuery("SELECT NEW dto.panelDTO.PanelDTO(p.model, p.image) FROM Panel p", PanelDTO.class).list();
+        List<PanelDTO> panels = session.createQuery(
+                "SELECT NEW dto.panelDTO.PanelDTO(p.model, p.image) FROM Panel p", PanelDTO.class).list();
         session.close();
 
         return panels;
     }
 
     /**
-     * Obtiene una lista de DTO que contiene información de modelo y fecha de producción de los paneles desde la base de datos
+     * Obtiene una lista de DTO que contiene información de modelo y fecha de producción de los paneles desde la base
+     * de datos
      * @return Lista de objetos PanelModelProductionDTO
      */
     @Override
     public List<PanelModelProductionDTO> getModelsProduction() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<PanelModelProductionDTO> panels = session.createQuery("SELECT NEW dto.panelDTO.PanelModelProductionDTO(p.model, p.productionDate) FROM Panel p", PanelModelProductionDTO.class).list();
+        List<PanelModelProductionDTO> panels = session.createQuery(
+                "SELECT NEW dto.panelDTO.PanelModelProductionDTO(p.model, p.productionDate) FROM Panel p",
+                PanelModelProductionDTO.class).list();
+
         session.close();
 
         return panels;
@@ -109,7 +118,8 @@ public class PanelDAO implements PanelDAOInterface {
     public Long totalPanels() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Long counter = (Long) session.createQuery("SELECT COUNT(p) FROM Panel p").getSingleResult();
+        Long counter = (Long) session.createQuery(
+                "SELECT COUNT(p) FROM Panel p").getSingleResult();
         session.close();
 
         return counter;
@@ -138,7 +148,8 @@ public class PanelDAO implements PanelDAOInterface {
     public Double avgPrices() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Double average = session.createQuery("SELECT AVG(p.price) FROM Panel p", Double.class).getSingleResult();
+        Double average = session.createQuery(
+                "SELECT AVG(p.price) FROM Panel p", Double.class).getSingleResult();
         session.close();
 
         return average;
@@ -153,7 +164,8 @@ public class PanelDAO implements PanelDAOInterface {
     public Double avgBrandPrices(String brand) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Double> query = session.createQuery("SELECT AVG(p.price) FROM Panel p WHERE p.brand = :brand", Double.class);
+        Query<Double> query = session.createQuery(
+                "SELECT AVG(p.price) FROM Panel p WHERE p.brand = :brand", Double.class);
         query.setParameter("brand", brand);
         Double average = (query.getSingleResult());
 
@@ -171,7 +183,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> getPanelsByMaxProductionYear(int year) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE YEAR(p.productionDate) = :year", Panel.class);
+        Query<Panel> query = session.createQuery(
+                "FROM Panel p WHERE YEAR(p.productionDate) = :year", Panel.class);
         query.setParameter("year", year);
 
         List<Panel> panels = query.getResultList();
@@ -189,7 +202,8 @@ public class PanelDAO implements PanelDAOInterface {
     @Override
     public Panel getPanelMaxEfficiency(String brand) {
             Session session = HibernateUtil.getSessionFactory().openSession();
-            Query<Panel> query = session.createQuery("FROM Panel p WHERE p.brand = :brand ORDER BY p.efficiency DESC", Panel.class);
+            Query<Panel> query = session.createQuery(
+                    "FROM Panel p WHERE p.brand = :brand ORDER BY p.efficiency DESC", Panel.class);
             query.setParameter("brand", brand);
             query.setMaxResults(1);
             return query.uniqueResult();
@@ -204,7 +218,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> findByModelLike(String model) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.model like :model", Panel.class);
+        Query<Panel> query = session.createQuery(
+                "FROM Panel p WHERE p.model like :model", Panel.class);
 
         List<Panel> filter = query.setParameter("model", "%" + model + "%").list();
         session.close();
@@ -221,7 +236,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> findByCategoryLike(String category) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.category like :category", Panel.class);
+        Query<Panel> query = session.createQuery(
+                "FROM Panel p WHERE p.category like :category", Panel.class);
 
         List<Panel> filter = query.setParameter("category", "%" + category + "%").list();
         session.close();
@@ -239,7 +255,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> findBetweenPrices(Double min, Double max) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.price >= :min AND p.price <= :max", Panel.class);
+        Query<Panel> query = session.createQuery(
+                "FROM Panel p WHERE p.price >= :min AND p.price <= :max", Panel.class);
         query.setParameter("min", min);
         query.setParameter("max", max);
 
@@ -250,7 +267,8 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     /**
-     * Busca y devuelve una lista de paneles cuyos precios se encuentran en el rango especificado y pertenecen a una marca específica
+     * Busca y devuelve una lista de paneles cuyos precios se encuentran en el rango especificado y pertenecen a una
+     * marca específica
      * @param min Valor mínimo del rango de precios
      * @param max Valor máximo del rango de precios
      * @param brand Marca de los paneles para filtrar
@@ -260,7 +278,8 @@ public class PanelDAO implements PanelDAOInterface {
     public List<Panel> findBetweenBrandPrices(Double min, Double max, String brand) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.price >= :min AND p.price <= :max AND p.brand = :brand", Panel.class);
+        Query<Panel> query = session.createQuery(
+                "FROM Panel p WHERE p.price >= :min AND p.price <= :max AND p.brand = :brand", Panel.class);
         query.setParameter("min", min);
         query.setParameter("max", max);
         query.setParameter("brand", brand);
@@ -286,7 +305,9 @@ public class PanelDAO implements PanelDAOInterface {
         List<Panel> filter = new ArrayList<>();
 
         try {
-            Query<Panel> query = session.createQuery("FROM Panel p WHERE p.nominalPower >= :min AND p.nominalPower <= :max AND p.category = :category", Panel.class);
+            Query<Panel> query = session.createQuery(
+                    "FROM Panel p WHERE p.nominalPower >= :min AND p.nominalPower <= :max AND p.category = :category",
+                    Panel.class);
             query.setParameter("min", min);
             query.setParameter("max", max);
             query.setParameter("category", category);
@@ -302,17 +323,20 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     /**
-     * Busca y devuelve una lista de paneles cuyos precios están en el rango especificado y pertenecen a marcas específicas
+     * Busca y devuelve una lista de paneles cuyos precios están en el rango especificado y pertenecen a marcas
+     * específicas
      * @param min Valor mínimo del rango de precios
      * @param max Valor máximo del rango de precios
      * @param brands Lista de marcas para filtrar
-     * @return Lista de objetos Panel cuyos precios están en el rango especificado y pertenecen a las marcas proporcionadas
+     * @return Lista de objetos Panel cuyos precios están en el rango especificado y pertenecen a las marcas
+     * proporcionadas
      */
     @Override
     public List<Panel> findBetweenBrandsPrices(Double min, Double max, List<String> brands) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Query<Panel> query = session.createQuery("FROM Panel p WHERE p.price >= :min AND p.price <= :max AND p.brand IN (:brands)", Panel.class);
+        Query<Panel> query = session.createQuery(
+                "FROM Panel p WHERE p.price >= :min AND p.price <= :max AND p.brand IN (:brands)", Panel.class);
         query.setParameter("min", min);
         query.setParameter("max", max);
         query.setParameterList("brands", brands);
@@ -423,7 +447,6 @@ public class PanelDAO implements PanelDAOInterface {
         } finally {
             session.close();
         }
-
         return true;
     }
 }

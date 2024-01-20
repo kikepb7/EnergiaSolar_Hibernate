@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class PanelAPIRest {
 
-    // Atributtes
+    // 1. Atributtes
     private final PanelDAOInterface panelDAO;
     private final APIKeyDAOInterface tokenDAO;
 
@@ -32,7 +32,7 @@ public class PanelAPIRest {
             .create();
 
 
-    // Constructor
+    // 2. Constructor
     public PanelAPIRest(PanelDAOInterface implementation, APIKeyDAOInterface impl) {
         Spark.port(8080);
         panelDAO = implementation;
@@ -41,9 +41,9 @@ public class PanelAPIRest {
         /* GET */
         // Protección con Token
         Spark.before("paneles/*", (request, response) -> {
-            String apiKey = request.headers("token");   // Valor de Key en Postman
-            System.out.println(apiKey);
-            if (apiKey == null || !tokenDAO.validateAPIKey(apiKey)) {
+            String apikey = request.headers("token");   // Valor de Key en Postman
+            System.out.println(apikey);
+            if (apikey == null || !tokenDAO.validateAPIKey(apikey)) {
                 Spark.halt(401, "Unauthorized access");
             }
         });
@@ -150,6 +150,18 @@ public class PanelAPIRest {
             String model = request.params(":model");
 
             List<Panel> panels = panelDAO.findByModelLike(model);
+
+            return gson.toJson(panels);
+        });
+
+        // Buscar paneles por categoría
+        Spark.get("/paneles/buscar_categoria/:category", (request, response) -> {
+
+            response.type("application/json");
+
+            String category = request.params(":category");
+
+            List<Panel> panels = panelDAO.findByCategoryLike(category);
 
             return gson.toJson(panels);
         });
@@ -367,8 +379,9 @@ public class PanelAPIRest {
                     "\"hint 12\": \"/paneles/max_eficiencia/:brand\"," +
                     "\"hint 13\": \"/paneles/paginado/:page/:amount\"," +
                     "\"hint 14\": \"/paneles/buscar/:min/:max/:brand\"," +
-                    "\"hint 15\": \"/paneles/buscar/potencia/:min/:max/:category\"," +
-                    "\"hint 16\": \"/paneles/buscar_varias/:min/:max/:listbrands\"}";
+                    "\"hint 15\": \"/paneles/buscar_categoria/:category\"," +
+                    "\"hint 16\": \"/paneles/buscar/potencia/:min/:max/:category\"," +
+                    "\"hint 17\": \"/paneles/buscar_varias/:min/:max/:listbrands\"}";
         });
 
 

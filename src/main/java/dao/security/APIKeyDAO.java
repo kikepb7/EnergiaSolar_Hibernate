@@ -106,6 +106,51 @@ public class APIKeyDAO implements APIKeyDAOInterface {
     }
 
 
+    /*@Override
+    public Token findByAPIKey(String apikey) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            session.beginTransaction();
+
+            Query<Token> query = session.createQuery("SELECT t FROM Token t WHERE t.apikey = :apikey", Token.class);
+            Token token = query.setParameter("apikey", apikey).getSingleResult();
+
+            if (token != null && token.isActive() && token.getUses() < 20) {
+                token.setUses(token.getUses() + 1);
+                return token;
+            } else {
+                return null;
+            }
+
+        } catch (HibernateException e) {
+            if (session.getTransaction() != null) {
+                session.getTransaction().rollback();
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
+    }
+
+    @Override
+    public boolean validateAPIKey(String apikey, String path) {
+        Token token = findByAPIKey(apikey);
+
+        if (path.equals("/tokens_actuales")) {
+            return token != null && token.isAllowRead();
+        } else if (path.equals("/crear_token")) {
+            return token != null && token.isActive();
+        } else if (path.equals("/borrar_token")) {
+            return token != null && token.isAllowDelete();
+        } else {
+            return token != null && token.isAllowUpdate();
+        }
+    }*/
+
     @Override
     public boolean validateAPIKey(String apikey) {
         Session session = HibernateUtil.getSessionFactory().openSession();

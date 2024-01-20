@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "Token")
 @ToString @EqualsAndHashCode
 public class Token {
-    // Propertties
+    // 1. Attributess
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter @Setter
@@ -41,7 +41,8 @@ public class Token {
     @Getter @Setter
     private boolean allowRead;
 
-    // Constructors
+
+    // 2. Constructors
     public Token() {}
 
     public Token(Long id, String apikey, int uses, boolean isActive, boolean allowDelete, boolean allowUpdate, boolean allowRead) {

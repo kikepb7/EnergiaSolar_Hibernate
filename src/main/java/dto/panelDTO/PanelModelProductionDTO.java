@@ -22,4 +22,3 @@ public class PanelModelProductionDTO {
         this.productionDate = productionDate;
     }
 }
-
