@@ -3,9 +3,8 @@ package servicios;
 import com.appslandia.common.gson.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dao.security.APIKeyDAO;
-import dao.security.APIKeyDAOInterface;
 import dao.PanelDAOInterface;
+import dao.security.APIKeyDAOInterface;
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.PanelModelProductionDTO;
 import entidades.Panel;
@@ -38,16 +37,51 @@ public class PanelAPIRest {
         panelDAO = implementation;
         tokenDAO = impl;
 
-        /* GET */
-        // Protección con Token
+
+        /* PROTECCIÓN CON TOKEN */
         Spark.before("paneles/*", (request, response) -> {
             String apikey = request.headers("token");   // Valor de Key en Postman
-            System.out.println(apikey);
-            if (apikey == null || !tokenDAO.validateAPIKey(apikey)) {
-                Spark.halt(401, "Unauthorized access");
+
+            Token token = tokenDAO.findTokenByApiKey(apikey);
+
+            if (token == null || !token.isActive()) {
+                Spark.halt(403, "Token is not active");
+            }
+
+            String requestMethod = request.requestMethod();
+            if (token != null && (
+                            (requestMethod.equals("POST") && !token.isAllowRead()) ||
+                            (requestMethod.equals("PUT") && !token.isAllowUpdate()) ||
+                            (requestMethod.equals("DELETE") && !token.isAllowDelete())
+            )) {
+                Spark.halt(403, "Operation not allowed");
             }
         });
 
+        Spark.before("token/*", (request, response) -> {
+            String apikey = request.headers("token");   // Valor de Key en Postman
+
+            Token token = tokenDAO.findTokenByApiKey(apikey);
+
+            if (token == null || !token.isActive()) {
+                Spark.halt(403, "Token is not active");
+            }
+
+            String requestMethod = request.requestMethod();
+            if (token != null && (
+                    (requestMethod.equals("POST") && !token.isAllowRead()) ||
+                            (requestMethod.equals("PUT") && !token.isAllowUpdate()) ||
+                            (requestMethod.equals("DELETE") && !token.isAllowDelete())
+            )) {
+                Spark.halt(403, "Operation not allowed");
+            }
+        });
+
+
+        // ---------------------------------------------------------------------------------------- //
+
+
+        /* GET */
         // Página de inicio
         Spark.get("/paneles_procesados", (request, response) -> {
             List<Panel> panels = panelDAO.getAllPanels();
@@ -59,7 +93,7 @@ public class PanelAPIRest {
         }, new ThymeleafTemplateEngine());
 
         // Obtener todos los paneles disponibles en la BD
-        Spark.get("/paneles", (request, response) -> {
+        Spark.get("/paneles/mostrar", (request, response) -> {
 
             response.type("application/json");
             List<Panel> panels = panelDAO.getAllPanels();
@@ -283,6 +317,8 @@ public class PanelAPIRest {
         });
 
 
+        // ---------------------------------------------------------------------------------------- //
+
 
         /* POST */
         // Endpoint para crear un panel con todos los datos
@@ -308,6 +344,8 @@ public class PanelAPIRest {
             return new ModelAndView(model, "registrar");
         }, new ThymeleafTemplateEngine());
 
+
+        // ---------------------------------------------------------------------------------------- //
 
 
         // PUT
@@ -345,6 +383,8 @@ public class PanelAPIRest {
         }, new ThymeleafTemplateEngine());
 
 
+        // ---------------------------------------------------------------------------------------- //
+
 
         /* DELETE */
         // Endpoint para eliminar un panel por su ID
@@ -361,12 +401,15 @@ public class PanelAPIRest {
         });
 
 
+        // ---------------------------------------------------------------------------------------- //
+
+
         /* ENDPOINT INCORRECTO */
         Spark.notFound((request, response) -> {
             response.type("application/json");
             return "{\"error\": \"Ruta no encontrada\"," +
-                    "\"hint 1\": \"/paneles\"," +
-                    "\"hint 2\": \"/paneles/resumen\"," +
+                    "\"hint 1\": \"/paneles/resumen\"," +
+                    "\"hint 2\": \"/paneles/mostrar\"," +
                     "\"hint 3\": \"/paneles/imagenes\"," +
                     "\"hint 4\": \"/paneles/mas_caros\"," +
                     "\"hint 5\": \"/paneles/buscarID/:id\"," +
@@ -385,6 +428,9 @@ public class PanelAPIRest {
         });
 
 
+        // ---------------------------------------------------------------------------------------- //
+
+
         /* PAGINACIÓN DE DATOS DE TODOS LOS PANELES */
         Spark.get("/paneles/paginado/:page/:amount", (request, response) -> {
 
@@ -401,10 +447,12 @@ public class PanelAPIRest {
         });
 
 
+        // ---------------------------------------------------------------------------------------- //
+
 
         /* APIKEYS */
         // Crear nuevos tokens de verificación
-        Spark.post("/crear_token", (request, response) -> {
+        Spark.post("/token/crear", (request, response) -> {
             String body = request.body();
             Token newToken = gson.fromJson(body, Token.class);
 
@@ -414,10 +462,40 @@ public class PanelAPIRest {
         });
 
         // Mostrar todos los tokens actuales y su situación
-        Spark.get("/tokens_actuales", (request, response) -> {
+        Spark.get("/token/mostrar", (request, response) -> {
             response.type("application/json");
             List<Token> tokens = tokenDAO.getAllTokens();
             return gson.toJson(tokens);
+        });
+
+        // Modificar parámetros de un token
+        Spark.put("/token/editar/:id", (request, response) -> {
+            Long id = Long.parseLong(request.params(":id"));
+            String body = request.body();
+
+            Token token = gson.fromJson(body, Token.class);
+            token.setId(id);
+
+            Token updatedToken = tokenDAO.update(token);
+            if (updatedToken != null) {
+                return gson.toJson(updatedToken);
+            } else {
+                response.status(404);
+                return "Token no encontrado";
+            }
+        });
+
+        // Eliminar un token por su ID
+        Spark.delete("token/eliminar/:id", (request, response) -> {
+            Long id = Long.parseLong(request.params(":id"));
+            boolean isDeleted = tokenDAO.deleteById(id);
+
+            if (isDeleted) {
+                return "Token eliminado correctamente";
+            } else {
+                response.status(404);
+                return "Token no encontrado";
+            }
         });
     }
 }

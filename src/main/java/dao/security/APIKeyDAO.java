@@ -15,6 +15,11 @@ import java.util.List;
 
 public class APIKeyDAO implements APIKeyDAOInterface {
 
+    /**
+     * Busca y devuelve un token por su identificador (ID)
+     * @param id Identificador del token
+     * @return Token encontrado o null en caso de no existir en la base de datos
+     */
     @Override
     public Token findById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -25,6 +30,10 @@ public class APIKeyDAO implements APIKeyDAOInterface {
         return token;
     }
 
+    /**
+     * Obtiene todos los registros de la entidad Token desde la base de datos
+     * @return Lista de objetos Token
+     */
     @Override
     public List<Token> getAllTokens() {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -35,6 +44,11 @@ public class APIKeyDAO implements APIKeyDAOInterface {
         return tokens;
     }
 
+    /**
+     * Crea un nuevo token en la base de datos
+     * @param token Token a crear
+     * @return Token creado
+     */
     @Override
     public Token createAPIKey(Token token) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -61,6 +75,11 @@ public class APIKeyDAO implements APIKeyDAOInterface {
         return token;
     }
 
+    /**
+     * Actualiza un token en la base de datos
+     * @param token Token a actualizar
+     * @return Token actualizado
+     */
     @Override
     public Token update(Token token) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -79,6 +98,11 @@ public class APIKeyDAO implements APIKeyDAOInterface {
         return token;
     }
 
+    /**
+     * Elimina un token de la base de datos por su identificador (ID)
+     * @param id Identificador del token a eliminar
+     * @return 'True' si se ha eliminado correctamente, 'False' si no se encuentra el token
+     */
     @Override
     public boolean deleteById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
@@ -105,86 +129,38 @@ public class APIKeyDAO implements APIKeyDAOInterface {
         return true;
     }
 
-
-    /*@Override
-    public Token findByAPIKey(String apikey) {
+    /**
+     * Busca y ddevuelve un token por su apikey
+     * @param apikey apikey del token
+     * @return Token encontrado o null en caso de no existir en la base de datos
+     */
+    @Override
+    public Token findTokenByApiKey(String apikey) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
             session.beginTransaction();
 
-            Query<Token> query = session.createQuery("SELECT t FROM Token t WHERE t.apikey = :apikey", Token.class);
+            Query<Token> query = session.createQuery("FROM Token t WHERE t.apikey = :apikey", Token.class);
             Token token = query.setParameter("apikey", apikey).getSingleResult();
 
-            if (token != null && token.isActive() && token.getUses() < 20) {
+            if (token != null && token.isActive() && token.getUses() <= 5) {
                 token.setUses(token.getUses() + 1);
+                if (token.getUses() > 5) {
+                    token.setActive(false);
+                }
+                session.update(token);
+                session.getTransaction().commit();
                 return token;
             } else {
                 return null;
             }
 
-        } catch (HibernateException e) {
-            if (session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
+        } catch (NoResultException e) {
             return null;
-        } catch (Exception e) {
+        } catch (HibernateException e) {
             e.printStackTrace();
             return null;
-        } finally {
-            session.close();
-        }
-    }
-
-    @Override
-    public boolean validateAPIKey(String apikey, String path) {
-        Token token = findByAPIKey(apikey);
-
-        if (path.equals("/tokens_actuales")) {
-            return token != null && token.isAllowRead();
-        } else if (path.equals("/crear_token")) {
-            return token != null && token.isActive();
-        } else if (path.equals("/borrar_token")) {
-            return token != null && token.isAllowDelete();
-        } else {
-            return token != null && token.isAllowUpdate();
-        }
-    }*/
-
-    @Override
-    public boolean validateAPIKey(String apikey) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        try {
-            Token token;
-            session.beginTransaction();
-
-            Query<Token> query = session.createQuery("SELECT t FROM Token t WHERE t.apikey = :apikey", Token.class);
-            query.setParameter("apikey", apikey);
-
-            try {
-                token = query.getSingleResult();
-            } catch (NoResultException e) {
-                e.printStackTrace();
-                return false;
-            }
-
-            boolean isValid = (token != null) && token.isActive() && (token.getUses() < 20);
-
-            if (isValid) {
-                token.setUses(token.getUses() + 1);
-                session.update(token);
-            }
-
-            session.getTransaction().commit();
-
-            return isValid;
-
-        } catch (HibernateException e) {
-            if (session.getTransaction() != null) {
-                session.getTransaction().rollback();
-            }
-            return false;
 
         } finally {
             if (session != null && session.isOpen()) {
