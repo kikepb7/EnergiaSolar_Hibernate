@@ -29,14 +29,6 @@ public class Token {
     @Getter @Setter
     private boolean isActive;
 
-    @Column(name = "allowDelete", nullable = false)
-    @Getter @Setter
-    private boolean allowDelete;
-
-    @Column(name = "allowUpdate", nullable = false)
-    @Getter @Setter
-    private boolean allowUpdate;
-
     @Column(name = "allowRead", nullable = false)
     @Getter @Setter
     private boolean allowRead;
@@ -45,13 +37,11 @@ public class Token {
     // 2. Constructors
     public Token() {}
 
-    public Token(Long id, String apikey, int uses, boolean isActive, boolean allowDelete, boolean allowUpdate, boolean allowRead) {
+    public Token(Long id, String apikey, int uses, boolean isActive, boolean allowRead) {
         this.id = id;
         this.apikey = apikey;
         this.uses = uses;
         this.isActive = isActive;
-        this.allowDelete = allowDelete;
-        this.allowUpdate = allowUpdate;
         this.allowRead = allowRead;
     }
 }

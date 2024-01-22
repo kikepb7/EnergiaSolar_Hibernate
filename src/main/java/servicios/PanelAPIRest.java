@@ -49,12 +49,18 @@ public class PanelAPIRest {
             }
 
             String requestMethod = request.requestMethod();
-            if (token != null && (
-                            (requestMethod.equals("POST") && !token.isAllowRead()) ||
-                            (requestMethod.equals("PUT") && !token.isAllowUpdate()) ||
-                            (requestMethod.equals("DELETE") && !token.isAllowDelete())
-            )) {
-                Spark.halt(403, "Operation not allowed");
+            if (token != null) {
+                if ((requestMethod.equals("GET") && !token.isAllowRead()) ||
+                        (
+                                (
+                                        requestMethod.equals("POST") ||
+                                                requestMethod.equals("PUT") ||
+                                                requestMethod.equals("DELETE")
+                                ) && token.isAllowRead()
+                        )
+                ) {
+                    Spark.halt(403, "Operation not allowed");
+                }
             }
         });
 
@@ -68,12 +74,18 @@ public class PanelAPIRest {
             }
 
             String requestMethod = request.requestMethod();
-            if (token != null && (
-                    (requestMethod.equals("POST") && !token.isAllowRead()) ||
-                            (requestMethod.equals("PUT") && !token.isAllowUpdate()) ||
-                            (requestMethod.equals("DELETE") && !token.isAllowDelete())
-            )) {
-                Spark.halt(403, "Operation not allowed");
+            if (token != null) {
+                if ((requestMethod.equals("GET") && !token.isAllowRead()) ||
+                        (
+                                (
+                                        requestMethod.equals("POST") ||
+                                        requestMethod.equals("PUT") ||
+                                        requestMethod.equals("DELETE")
+                                ) && token.isAllowRead()
+                        )
+                ) {
+                    Spark.halt(403, "Operation not allowed");
+                }
             }
         });
 
@@ -452,7 +464,7 @@ public class PanelAPIRest {
 
         /* APIKEYS */
         // Crear nuevos tokens de verificación
-        Spark.post("/token/crear", (request, response) -> {
+        Spark.post("/crear_token", (request, response) -> {
             String body = request.body();
             Token newToken = gson.fromJson(body, Token.class);
 
