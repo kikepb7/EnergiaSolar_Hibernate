@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import dao.PanelDAOInterface;
 import dao.security.APIKeyDAOInterface;
 import dto.panelDTO.PanelDTO;
-import dto.panelDTO.PanelModelProductionDTO;
+import dto.panelDTO.ModelPricePowerDTO;
 import entidades.Panel;
 import entidades.Token;
 import spark.ModelAndView;
@@ -39,7 +39,7 @@ public class PanelAPIRest {
 
 
         /* PROTECCIÓN CON TOKEN */
-        Spark.before("paneles/*", (request, response) -> {
+        /*Spark.before("paneles/*", (request, response) -> {
             String apikey = request.headers("token");   // Valor de Key en Postman
 
             Token token = tokenDAO.findTokenByApiKey(apikey);
@@ -87,7 +87,7 @@ public class PanelAPIRest {
                     Spark.halt(403, "Operation not allowed");
                 }
             }
-        });
+        });*/
 
 
         // ---------------------------------------------------------------------------------------- //
@@ -158,11 +158,11 @@ public class PanelAPIRest {
         });
 
         // Obtener un resumen con los modelos y la fecha de fabricación
-        Spark.get("/paneles/modelos_fabricacion", (request, response) -> {
+        Spark.get("/paneles/modelos_potencia_precio", (request, response) -> {
 
             response.type("application/json");
 
-            List<PanelModelProductionDTO> resume = panelDAO.getModelsProduction();
+            List<ModelPricePowerDTO> resume = panelDAO.getModelsPricePower();
 
             if (resume != null && !resume.isEmpty()) {
                 return gson.toJson(resume);
@@ -429,10 +429,10 @@ public class PanelAPIRest {
                     "\"hint 7\": \"/paneles/media_precios\"," +
                     "\"hint 8\": \"/paneles/buscar/:min/:max\"," +
                     "\"hint 9\": \"/paneles/fabricacion/:year\"," +
-                    "\"hint 10\": \"/paneles/modelos_fabricacion\"," +
-                    "\"hint 11\": \"/paneles/media_precios/:brand\"," +
-                    "\"hint 12\": \"/paneles/max_eficiencia/:brand\"," +
-                    "\"hint 13\": \"/paneles/paginado/:page/:amount\"," +
+                    "\"hint 10\": \"/paneles/media_precios/:brand\"," +
+                    "\"hint 11\": \"/paneles/max_eficiencia/:brand\"," +
+                    "\"hint 12\": \"/paneles/paginado/:page/:amount\"," +
+                    "\"hint 13\": \"/paneles/modelos_potencia_precio\"," +
                     "\"hint 14\": \"/paneles/buscar/:min/:max/:brand\"," +
                     "\"hint 15\": \"/paneles/buscar_categoria/:category\"," +
                     "\"hint 16\": \"/paneles/buscar/potencia/:min/:max/:category\"," +

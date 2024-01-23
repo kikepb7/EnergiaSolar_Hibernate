@@ -1,7 +1,7 @@
 package dao;
 
 import dto.panelDTO.PanelDTO;
-import dto.panelDTO.PanelModelProductionDTO;
+import dto.panelDTO.ModelPricePowerDTO;
 import entidades.Panel;
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface PanelDAOInterface {
     List<Panel> getMoreExpensive();
     List<String> getAllImages();
     List<PanelDTO> getImagesName();
-    List<PanelModelProductionDTO> getModelsProduction();
+    List<ModelPricePowerDTO> getModelsPricePower();
     Long totalPanels();
     Panel findById(Long id);
     Double avgPrices();

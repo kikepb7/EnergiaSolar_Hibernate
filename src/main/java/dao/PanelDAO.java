@@ -1,7 +1,7 @@
 package dao;
 
 import dto.panelDTO.PanelDTO;
-import dto.panelDTO.PanelModelProductionDTO;
+import dto.panelDTO.ModelPricePowerDTO;
 import entidades.Panel;
 import org.hibernate.Session;
 import util.HibernateUtil;
@@ -78,7 +78,7 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     /**
-     * Obtiene una lsitta de DTO que contiene información de modelo e imágenes de los paneles desde la base de datos
+     * Obtiene una lista de DTO que contiene información de modelo e imágenes de los paneles desde la base de datos
      * @return Lista de objetos PanelDTO
      */
     @Override
@@ -93,17 +93,18 @@ public class PanelDAO implements PanelDAOInterface {
     }
 
     /**
-     * Obtiene una lista de DTO que contiene información de modelo y fecha de producción de los paneles desde la base
+     * Obtiene una lista de DTO que contiene información de modelo, la potencia nominal y el precio de los paneles
+     * desde la base
      * de datos
      * @return Lista de objetos PanelModelProductionDTO
      */
     @Override
-    public List<PanelModelProductionDTO> getModelsProduction() {
+    public List<ModelPricePowerDTO> getModelsPricePower() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        List<PanelModelProductionDTO> panels = session.createQuery(
-                "SELECT NEW dto.panelDTO.PanelModelProductionDTO(p.model, p.productionDate) FROM Panel p",
-                PanelModelProductionDTO.class).list();
+        List<ModelPricePowerDTO> panels = session.createQuery(
+                "SELECT NEW dto.panelDTO.ModelPricePowerDTO(p.model, p.nominal_power, p.price) FROM Panel p",
+                ModelPricePowerDTO.class).list();
 
         session.close();
 
