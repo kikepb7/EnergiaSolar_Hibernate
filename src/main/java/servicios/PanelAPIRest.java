@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static spark.Spark.before;
+
 public class PanelAPIRest {
 
     // 1. Atributtes
@@ -36,7 +38,6 @@ public class PanelAPIRest {
         Spark.port(8080);
         panelDAO = implementation;
         tokenDAO = impl;
-
 
         /* PROTECCIÓN CON TOKEN */
         /*Spark.before("paneles/*", (request, response) -> {
@@ -101,7 +102,7 @@ public class PanelAPIRest {
             Map<String, Object> model = new HashMap<>();
             model.put("panels", panels);
 
-            return new ModelAndView(model, "paneles"); // resources/templates/
+            return new ModelAndView(model, "paneles"); // --> resources/templates/
         }, new ThymeleafTemplateEngine());
 
         // Obtener todos los paneles disponibles en la BD
