@@ -103,7 +103,7 @@ public class PanelDAO implements PanelDAOInterface {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         List<ModelPricePowerDTO> panels = session.createQuery(
-                "SELECT NEW dto.panelDTO.ModelPricePowerDTO(p.model, p.nominal_power, p.price) FROM Panel p",
+                "SELECT NEW dto.panelDTO.ModelPricePowerDTO(p.model, p.nominalPower, p.price) FROM Panel p",
                 ModelPricePowerDTO.class).list();
 
         session.close();

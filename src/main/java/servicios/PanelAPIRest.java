@@ -159,7 +159,7 @@ public class PanelAPIRest {
         });
 
         // Obtener un resumen con los modelos y la fecha de fabricación
-        Spark.get("/paneles/modelos_potencia_precio", (request, response) -> {
+        Spark.get("/modelos_potencia_precio", (request, response) -> {
 
             response.type("application/json");
 
@@ -465,7 +465,7 @@ public class PanelAPIRest {
 
         /* APIKEYS */
         // Crear nuevos tokens de verificación
-        Spark.post("/crear_token", (request, response) -> {
+        /*Spark.post("/crear_token", (request, response) -> {
             String body = request.body();
             Token newToken = gson.fromJson(body, Token.class);
 
@@ -509,6 +509,6 @@ public class PanelAPIRest {
                 response.status(404);
                 return "Token no encontrado";
             }
-        });
+        });*/
     }
 }
