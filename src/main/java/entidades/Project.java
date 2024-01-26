@@ -12,10 +12,10 @@ import java.util.List;
 
 
 @Entity
-@Table(name = "SolarInstalation")
+@Table(name = "Project")
 @ToString
 @EqualsAndHashCode
-public class SolarInstalation {
+public class Project {
 
     // 1. Attributes
     @Id
@@ -46,9 +46,9 @@ public class SolarInstalation {
 
 
     // 2. Constructors
-    public SolarInstalation() {}
+    public Project() {}
 
-    public SolarInstalation(Long id, String name, String address, int generationCapacity, LocalDate instalationDate, List<Panel> storage) {
+    public Project(Long id, String name, String address, int generationCapacity, LocalDate instalationDate, List<Panel> storage) {
         this.id = id;
         this.name = name;
         this.address = address;

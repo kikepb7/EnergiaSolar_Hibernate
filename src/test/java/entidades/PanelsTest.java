@@ -6,7 +6,7 @@ import util.HibernateUtil;
 
 import java.util.List;
 
-public class MueblesTest {
+public class PanelsTest {
     @Test
     void Test1() {
 
