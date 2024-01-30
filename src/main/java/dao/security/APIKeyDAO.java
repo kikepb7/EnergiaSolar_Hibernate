@@ -144,9 +144,9 @@ public class APIKeyDAO implements APIKeyDAOInterface {
             Query<Token> query = session.createQuery("FROM Token t WHERE t.apikey = :apikey", Token.class);
             Token token = query.setParameter("apikey", apikey).getSingleResult();
 
-            if (token != null && token.isActive() && token.getUses() <= 5) {
+            if (token != null && token.isActive() && token.getUses() <= 20) {
                 token.setUses(token.getUses() + 1);
-                if (token.getUses() > 5) {
+                if (token.getUses() > 20) {
                     token.setActive(false);
                 }
                 session.update(token);

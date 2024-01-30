@@ -40,7 +40,7 @@ public class PanelAPIRest {
         tokenDAO = impl;
 
         /* PROTECCIÓN CON TOKEN */
-        /*Spark.before("paneles/*", (request, response) -> {
+        Spark.before("paneles/*", (request, response) -> {
             String apikey = request.headers("token");   // Valor de Key en Postman
 
             Token token = tokenDAO.findTokenByApiKey(apikey);
@@ -88,7 +88,7 @@ public class PanelAPIRest {
                     Spark.halt(403, "Operation not allowed");
                 }
             }
-        });*/
+        });
 
 
         // ---------------------------------------------------------------------------------------- //
@@ -96,7 +96,7 @@ public class PanelAPIRest {
 
         /* GET */
         // Página de inicio
-        Spark.get("/paneles_procesados", (request, response) -> {
+        Spark.get("/paneles", (request, response) -> {
             List<Panel> panels = panelDAO.getAllPanels();
 
             Map<String, Object> model = new HashMap<>();
@@ -465,7 +465,7 @@ public class PanelAPIRest {
 
         /* APIKEYS */
         // Crear nuevos tokens de verificación
-        /*Spark.post("/crear_token", (request, response) -> {
+        Spark.post("/crear_token", (request, response) -> {
             String body = request.body();
             Token newToken = gson.fromJson(body, Token.class);
 
@@ -509,6 +509,6 @@ public class PanelAPIRest {
                 response.status(404);
                 return "Token no encontrado";
             }
-        });*/
+        });
     }
 }
