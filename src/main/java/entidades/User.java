@@ -1,58 +1,67 @@
 package entidades;
 
+import com.google.gson.annotations.Expose;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "User")
 @ToString @EqualsAndHashCode
-public class User {
+public class User implements Serializable {
     // 1. Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private Long id;
 
     @Column(name = "name", nullable = false, length = 40)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String name;
 
     @Column(name = "lastName", nullable = false, length = 40)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String lastName;
 
+    @Column(name = "phone", nullable = false, length = 20)
+    @Getter @Setter @Expose
+    private String phone;
+
     @Column(name= "email", nullable = false, unique = true)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String email;
 
     @Column(name = "password", nullable = false)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String password;
 
-    @Column(name = "registrationDate", nullable = false)
-    @Getter @Setter
-    private LocalDate registrationDate;
+    @Column(name = "type_user", nullable = false)
+    @Getter @Setter @Expose
+    private boolean typeUser;
 
-    @Column(name = "purchaseDate", nullable = false)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Getter @Setter
-    private LocalDate purchaseDate;
+    private List<Project> projects = new ArrayList<>();
 
 
     // 2. Constructors
     public User() {}
 
-    public User(Long id, String name, String lastName, String email, String password, LocalDate registrationDate, LocalDate purchaseDate) {
+    public User(Long id, String name, String lastName, String phone, String email, String password, boolean typeUser, List<Project> projects) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
+        this.phone = phone;
         this.email = email;
         this.password = password;
-        this.registrationDate = registrationDate;
-        this.purchaseDate = purchaseDate;
+        this.typeUser = typeUser;
+        this.projects = projects;
     }
 }

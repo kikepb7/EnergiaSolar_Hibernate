@@ -1,5 +1,6 @@
 package entidades;
 
+import com.google.gson.annotations.Expose;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,40 +21,49 @@ public class Project {
     // 1. Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
+    @Getter @Setter @Expose
     private Long id;
 
     @Column(name = "name", length = 100, unique=true, nullable = false)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String name;
 
     @Column(name = "address", nullable = false)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String address;
 
     @Column(name = "generation_capacity", nullable = false)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private int generationCapacity;
 
     @Column(name = "instalation_date", nullable = false)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private LocalDate instalationDate;
 
-    @OneToMany(mappedBy = "panel",fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_key", foreignKey = @ForeignKey(name = "fk_project_user"))
     @Getter @Setter
-    private List<Panel> storage = new ArrayList<>();
+    private User user;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "calculation_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "calculation_id")
+    )
+    @Getter @Setter
+    private List<Calculation> calculations = new ArrayList<>();
 
 
     // 2. Constructors
     public Project() {}
 
-    public Project(Long id, String name, String address, int generationCapacity, LocalDate instalationDate, List<Panel> storage) {
+    public Project(Long id, String name, String address, int generationCapacity, LocalDate instalationDate, User user) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.generationCapacity = generationCapacity;
         this.instalationDate = instalationDate;
-        this.storage = storage;
+        this.user = user;
     }
 }
