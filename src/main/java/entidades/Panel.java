@@ -71,7 +71,7 @@ public class Panel implements Serializable {
     // 2. Constructors
     public Panel() {}
 
-    public Panel(Long id, String brand, String category, LocalDate productionDate, String efficiency, String image, String model, int nominalPower, double price) {
+    public Panel(Long id, String brand, String category, LocalDate productionDate, String efficiency, String image, String model, int nominalPower, double price, List<Project> projects) {
         this.id = id;
         this.brand = brand;
         this.category = category;
@@ -81,5 +81,6 @@ public class Panel implements Serializable {
         this.model = model;
         this.nominalPower = nominalPower;
         this.price = price;
+        this.projects = projects;
     }
 }

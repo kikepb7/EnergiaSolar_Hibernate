@@ -57,7 +57,7 @@ public class User implements Serializable {
     // 2. Constructors
     public User() {}
 
-    public User(Long id, String name, String lastName, String phone, String email, String password, boolean typeUser, List<Project> projects) {
+    public User(Long id, String name, String lastName, String phone, String email, String password, boolean typeUser, List<Project> projects, List<Report> reports) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -66,5 +66,6 @@ public class User implements Serializable {
         this.password = password;
         this.typeUser = typeUser;
         this.projects = projects;
+        this.reports = reports;
     }
 }

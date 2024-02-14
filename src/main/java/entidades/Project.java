@@ -67,7 +67,7 @@ public class Project {
     // 2. Constructors
     public Project() {}
 
-    public Project(Long id, String name, String address, int generationCapacity, LocalDate instalationDate, User user, List<Calculation> calculations) {
+    public Project(Long id, String name, String address, int generationCapacity, LocalDate instalationDate, User user, List<Calculation> calculations, List<Panel> panels) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -75,5 +75,6 @@ public class Project {
         this.instalationDate = instalationDate;
         this.user = user;
         this.calculations = calculations;
+        this.panels = panels;
     }
 }
