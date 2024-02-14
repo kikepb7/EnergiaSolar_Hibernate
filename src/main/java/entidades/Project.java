@@ -41,7 +41,7 @@ public class Project {
     private LocalDate instalationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_key", foreignKey = @ForeignKey(name = "fk_project_user"))
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_project_user"))
     @Getter @Setter
     private User user;
 
@@ -54,16 +54,26 @@ public class Project {
     @Getter @Setter
     private List<Calculation> calculations = new ArrayList<>();
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "panel_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "panel_id")
+    )
+    @Getter @Setter
+    private List<Panel> panels = new ArrayList<>();
+
 
     // 2. Constructors
     public Project() {}
 
-    public Project(Long id, String name, String address, int generationCapacity, LocalDate instalationDate, User user) {
+    public Project(Long id, String name, String address, int generationCapacity, LocalDate instalationDate, User user, List<Calculation> calculations) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.generationCapacity = generationCapacity;
         this.instalationDate = instalationDate;
         this.user = user;
+        this.calculations = calculations;
     }
 }

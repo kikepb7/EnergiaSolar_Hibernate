@@ -24,6 +24,7 @@
         <mapping class="entidades.Panel"/>
         <mapping class="entidades.Token"/>
         <mapping class="entidades.User"/>
+        <mapping class="entidades.Report"/>
         <mapping class="entidades.Project"/>
         <mapping class="entidades.Calculation"/>
 

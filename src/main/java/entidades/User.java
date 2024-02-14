@@ -5,10 +5,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +14,7 @@ import java.util.List;
 @Table(name = "User")
 @ToString @EqualsAndHashCode
 public class User implements Serializable {
+
     // 1. Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +48,10 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @Getter @Setter
     private List<Project> projects = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @Getter @Setter
+    private List<Report> reports = new ArrayList<>();
 
 
     // 2. Constructors

@@ -8,6 +8,8 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Panel")
@@ -56,15 +58,20 @@ public class Panel implements Serializable {
     @Getter @Setter
     private double price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="panel_key",foreignKey = @ForeignKey(name = "fk_panel_solarInstalation"))
-    private Panel panel;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "panel_project",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "panel_id")
+    )
+    @Getter @Setter
+    private List<Project> projects = new ArrayList<>();
 
 
     // 2. Constructors
     public Panel() {}
 
-    public Panel(Long id, String brand, String category, LocalDate productionDate, String efficiency, String image, String model, int nominalPower, double price, Panel panel) {
+    public Panel(Long id, String brand, String category, LocalDate productionDate, String efficiency, String image, String model, int nominalPower, double price) {
         this.id = id;
         this.brand = brand;
         this.category = category;
@@ -74,6 +81,5 @@ public class Panel implements Serializable {
         this.model = model;
         this.nominalPower = nominalPower;
         this.price = price;
-        this.panel = panel;
     }
 }
