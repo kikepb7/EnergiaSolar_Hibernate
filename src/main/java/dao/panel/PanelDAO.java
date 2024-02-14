@@ -1,4 +1,4 @@
-package dao;
+package dao.panel;
 
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.ModelPricePowerDTO;

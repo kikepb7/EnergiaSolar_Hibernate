@@ -1,4 +1,4 @@
-import dao.PanelDAO;
+import dao.panel.PanelDAO;
 import dao.security.APIKeyDAO;
 import servicios.PanelAPIRest;
 

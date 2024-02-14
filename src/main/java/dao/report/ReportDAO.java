@@ -1,4 +1,4 @@
-package dao;
+package dao.report;
 
 public class ReportDAO {
 }

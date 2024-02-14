@@ -3,7 +3,7 @@ package servicios;
 import com.appslandia.common.gson.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dao.PanelDAOInterface;
+import dao.panel.PanelDAOInterface;
 import dao.security.APIKeyDAOInterface;
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.ModelPricePowerDTO;

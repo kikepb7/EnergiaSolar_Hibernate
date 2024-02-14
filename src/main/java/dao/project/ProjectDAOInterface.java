@@ -1,4 +1,4 @@
-package dao;
+package dao.project;
 
 public interface ProjectDAOInterface {
 

@@ -1,34 +1,35 @@
-package dao;
+package dao.user;
 
+import entidades.User;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
 import javax.persistence.PersistenceException;
 
-public class ProjectDAO implements ProjectDAOInterface {
+public class UserDAO implements UserDAOInterface {
     @Override
-    public ProjectDAO createProject(ProjectDAO p) {
+    public User createUser(User u) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
             session.beginTransaction();
-            session.save(p);
+            session.save(u);
             session.getTransaction().commit();
         } catch (PersistenceException e) {
             e.printStackTrace();
             session.getTransaction().rollback();
         }
         session.close();
-        return p;
+        return u;
     }
 
     @Override
-    public ProjectDAO findById(Long id) {
+    public User findById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        ProjectDAO p = session.find(ProjectDAO.class, id);
+        User u = session.find(User.class, id);
         session.close();
 
-        return p;
+        return u;
     }
 }
