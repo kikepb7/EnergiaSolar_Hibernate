@@ -4,11 +4,15 @@ import com.appslandia.common.gson.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.panel.PanelDAOInterface;
+import dao.report.ReportDAOInterface;
 import dao.security.APIKeyDAOInterface;
+import dao.user.UserDAOInterface;
 import dto.panelDTO.PanelDTO;
 import dto.panelDTO.ModelPricePowerDTO;
 import entidades.Panel;
+import entidades.Report;
 import entidades.Token;
+import entidades.User;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -25,6 +29,8 @@ public class PanelAPIRest {
 
     // 1. Atributtes
     private final PanelDAOInterface panelDAO;
+    private final ReportDAOInterface implReport;
+    private final UserDAOInterface implUser;
     private final APIKeyDAOInterface tokenDAO;
 
     private final Gson gson = new GsonBuilder()
@@ -34,9 +40,11 @@ public class PanelAPIRest {
 
 
     // 2. Constructor
-    public PanelAPIRest(PanelDAOInterface implementation, APIKeyDAOInterface impl) {
+    public PanelAPIRest(PanelDAOInterface implementation, ReportDAOInterface reportDAO, UserDAOInterface userDAO, APIKeyDAOInterface impl) {
         Spark.port(8080);
         panelDAO = implementation;
+        implReport = reportDAO;
+        implUser = userDAO;
         tokenDAO = impl;
 
         /* PROTECCIÓN CON TOKEN */
@@ -331,6 +339,27 @@ public class PanelAPIRest {
 
 
         // ---------------------------------------------------------------------------------------- //
+        // RELACIONES
+
+        // Listar todos los reportes de un usuario
+        Spark.get("/reportes/:userId", (request, response) -> {
+
+            response.type("application/json");
+
+            Long id = Long.parseLong(request.params(":userId"));
+            User user = implUser.findById(id);
+
+            if (user != null) {
+                List<Report> reports = implReport.getReportsUser(user);
+                return gson.toJson(reports);
+            } else {
+                response.status(404);
+                return "Usuario no encontrado";
+            }
+        });
+
+
+        // ---------------------------------------------------------------------------------------- //
 
 
         /* POST */
@@ -509,6 +538,14 @@ public class PanelAPIRest {
                 response.status(404);
                 return "Token no encontrado";
             }
+        });
+
+
+        // PRUEBA
+        Spark.exception(Exception.class, (e, req, res) -> {
+            e.printStackTrace(); // Imprime la excepción en la consola
+            res.status(500); // Establece el código de estado HTTP 500
+            res.body("Excepcion en tu codigo"); // Mensaje de error para el cliente
         });
     }
 }

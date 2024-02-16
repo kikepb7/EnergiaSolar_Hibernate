@@ -58,12 +58,7 @@ public class Panel implements Serializable {
     @Getter @Setter
     private double price;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "panel_project",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "panel_id")
-    )
+    @ManyToMany(mappedBy = "panels")
     @Getter @Setter
     private List<Project> projects = new ArrayList<>();
 

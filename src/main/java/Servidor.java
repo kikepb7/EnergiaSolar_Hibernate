@@ -1,5 +1,7 @@
 import dao.panel.PanelDAO;
+import dao.report.ReportDAO;
 import dao.security.APIKeyDAO;
+import dao.user.UserDAO;
 import servicios.PanelAPIRest;
 
 import static spark.Spark.before;
@@ -7,7 +9,7 @@ import static spark.Spark.before;
 public class Servidor {
     public static void main(String[] args) {
 
-        PanelAPIRest api = new PanelAPIRest(new PanelDAO(), new APIKeyDAO());
+        PanelAPIRest api = new PanelAPIRest(new PanelDAO(), new ReportDAO(), new UserDAO(), new APIKeyDAO());
 
         enableCORS("*", "*", "*");
     }

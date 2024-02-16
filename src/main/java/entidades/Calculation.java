@@ -20,9 +20,7 @@ public class Calculation {
     // 1. Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter
-    @Setter
-    @Expose
+    @Getter @Setter @Expose
     private Long id;
 
     @Column(name = "sun_hours")

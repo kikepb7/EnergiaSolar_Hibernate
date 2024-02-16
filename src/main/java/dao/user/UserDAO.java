@@ -1,5 +1,6 @@
 package dao.user;
 
+import entidades.Report;
 import entidades.User;
 import org.hibernate.Session;
 import util.HibernateUtil;
@@ -27,9 +28,9 @@ public class UserDAO implements UserDAOInterface {
     public User findById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        User u = session.find(User.class, id);
+        User user = session.find(User.class, id);
         session.close();
 
-        return u;
+        return user;
     }
 }
