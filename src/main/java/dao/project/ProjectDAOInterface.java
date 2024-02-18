@@ -1,8 +1,10 @@
 package dao.project;
 
+import entidades.Project;
+
 public interface ProjectDAOInterface {
 
-    ProjectDAO createProject(ProjectDAO p);
+    Project createProject(Project p);
 
-    ProjectDAO findById(Long id);
+    Project findById(Long id);
 }

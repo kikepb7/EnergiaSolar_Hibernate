@@ -67,4 +67,14 @@ INSERT INTO report(content, registration_date, serial_report, user_id) VALUES('D
 INSERT INTO panel_project(project_id, panel_id) VALUES(1, 1);
 INSERT INTO panel_project(project_id, panel_id) VALUES(1, 2);
 INSERT INTO panel_project(project_id, panel_id) VALUES(1, 3);
+INSERT INTO panel_project(project_id, panel_id) VALUES(2, 5);
+INSERT INTO panel_project(project_id, panel_id) VALUES(2, 9);
+INSERT INTO panel_project(project_id, panel_id) VALUES(3, 2);
+INSERT INTO panel_project(project_id, panel_id) VALUES(3, 6);
+INSERT INTO panel_project(project_id, panel_id) VALUES(3, 12);
+INSERT INTO panel_project(project_id, panel_id) VALUES(4, 8);
+INSERT INTO panel_project(project_id, panel_id) VALUES(4, 14);
+INSERT INTO panel_project(project_id, panel_id) VALUES(5, 7);
+INSERT INTO panel_project(project_id, panel_id) VALUES(5, 10);
+INSERT INTO panel_project(project_id, panel_id) VALUES(5, 15);
 --INSERT INTO calculation();

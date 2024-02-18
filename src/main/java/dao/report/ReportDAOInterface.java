@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface ReportDAOInterface {
     Report findById(Long id);
-    boolean assignUser(Report r, User u);
-    List<Report> getReportsUser(User u);
+    Report createReport(Report r);
 }

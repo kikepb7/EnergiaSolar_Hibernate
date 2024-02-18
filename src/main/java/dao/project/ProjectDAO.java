@@ -1,5 +1,6 @@
 package dao.project;
 
+import entidades.Project;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
@@ -7,7 +8,7 @@ import javax.persistence.PersistenceException;
 
 public class ProjectDAO implements ProjectDAOInterface {
     @Override
-    public ProjectDAO createProject(ProjectDAO p) {
+    public Project createProject(Project p) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
@@ -23,10 +24,10 @@ public class ProjectDAO implements ProjectDAOInterface {
     }
 
     @Override
-    public ProjectDAO findById(Long id) {
+    public Project findById(Long id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        ProjectDAO p = session.find(ProjectDAO.class, id);
+        Project p = session.find(Project.class, id);
         session.close();
 
         return p;

@@ -1,4 +1,5 @@
-package asociaciones;
+/*
+package associations;
 
 import dao.AsociacionesDAO;
 import dao.AsociacionesDAOInterface;
@@ -70,3 +71,4 @@ public class MueblesProvTest {
 
     }
 }
+*/

@@ -1,5 +1,6 @@
 package entidades;
 
+import com.google.gson.annotations.Expose;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,43 +20,39 @@ public class Panel implements Serializable {
     // 1. Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private Long id;
 
-    /*@Column(name = "serial_code", nullable = false)
-    @Getter @Setter
-    private String serialCode;*/
-
     @Column(name = "brand", nullable = false)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String brand;
 
     @Column(name = "category")
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String category;
 
     @Column(name = "production_date")
-    @Getter @Setter
+    @Getter @Setter @Expose
     private LocalDate productionDate;
 
     @Column(name = "efficiency")
-    @Getter @Setter
-    private String efficiency;
+    @Getter @Setter @Expose
+    private double efficiency;
 
     @Column(name = "image")
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String image;
 
     @Column(name = "model", unique = true, nullable = false)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String model;
 
     @Column(name = "nominal_power")
-    @Getter @Setter
+    @Getter @Setter @Expose
     private int nominalPower;
 
     @Column(name = "price", nullable = false)
-    @Getter @Setter
+    @Getter @Setter @Expose
     private double price;
 
     @ManyToMany(mappedBy = "panels")
@@ -66,7 +63,7 @@ public class Panel implements Serializable {
     // 2. Constructors
     public Panel() {}
 
-    public Panel(Long id, String brand, String category, LocalDate productionDate, String efficiency, String image, String model, int nominalPower, double price, List<Project> projects) {
+    public Panel(Long id, String brand, String category, LocalDate productionDate, double efficiency, String image, String model, int nominalPower, double price, List<Project> projects) {
         this.id = id;
         this.brand = brand;
         this.category = category;
