@@ -78,7 +78,7 @@ public class AssociationsDAO implements AssociationsDAOInterface {
 
         try {
             session.beginTransaction();
-            c.getProjects().add(pr);
+            c.setProject(pr);
             session.update(c);
             session.getTransaction().commit();
         } catch (PersistenceException e) {
@@ -125,6 +125,8 @@ public class AssociationsDAO implements AssociationsDAOInterface {
             listReports = query.getSingleResult().getReports();
         } catch (NoResultException nre) {
             listReports = new ArrayList<>();
+        } catch (NullPointerException npe) {
+            listReports = null;
         } finally {
             session.close();
         }
@@ -165,6 +167,8 @@ public class AssociationsDAO implements AssociationsDAOInterface {
             listProjects = query.getSingleResult().getProjects();
         } catch (NoResultException nre) {
             listProjects = new ArrayList<>();
+        } catch (NullPointerException npe) {
+            listProjects = null;
         } finally {
             session.close();
         }
@@ -186,6 +190,8 @@ public class AssociationsDAO implements AssociationsDAOInterface {
 
         } catch (NoResultException nre) {
             listProjects = new ArrayList<>();
+        } catch (NullPointerException npe) {
+            listProjects = null;
         } finally {
             session.close();
         }
@@ -207,6 +213,8 @@ public class AssociationsDAO implements AssociationsDAOInterface {
 
         } catch (NoResultException nre) {
             listPanels = new ArrayList<>();
+        } catch (NullPointerException npe) {
+            listPanels = null;
         } finally {
             session.close();
         }
@@ -215,24 +223,22 @@ public class AssociationsDAO implements AssociationsDAOInterface {
     }
 
     @Override
-    public List<Project> projectCalculations(Calculation c) {
-        List<Project> listProjects;
+    public Project getProjectCaltulation(Calculation c) {
+        Project project;
 
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
-            Query<Calculation> query = session.createQuery("SELECT c FROM Calculation c JOIN FETCH c.projects WHERE c.id =:id", Calculation.class);
+            Query<Calculation> query = session.createQuery("SELECT c FROM Calculation c JOIN FETCH c.project WHERE c.id =:id", Calculation.class);
             query.setParameter("id", c.getId());
-
-            listProjects = query.getSingleResult().getProjects();
-
+            project = query.getSingleResult().getProject();
         } catch (NoResultException nre) {
-            listProjects = new ArrayList<>();
+            project = null;
         } finally {
             session.close();
         }
 
-        return listProjects;
+        return project;
     }
 
     @Override
@@ -249,6 +255,8 @@ public class AssociationsDAO implements AssociationsDAOInterface {
 
         } catch (NoResultException nre) {
             listCalculations = new ArrayList<>();
+        } catch (NullPointerException npe) {
+            listCalculations = null;
         } finally {
             session.close();
         }

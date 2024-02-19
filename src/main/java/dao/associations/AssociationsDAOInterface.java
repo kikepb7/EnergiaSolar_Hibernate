@@ -26,7 +26,7 @@ public interface AssociationsDAOInterface {
 
     List<Panel> installedPanels(Project pr);
 
-    List<Project> projectCalculations(Calculation c);
+    Project getProjectCaltulation(Calculation c);
 
     List<Calculation> doneCalculations(Project pr);
 }

@@ -48,15 +48,16 @@ public class Calculation {
     @Getter @Setter @Expose
     private double totalPrice;
 
-    @OneToMany(mappedBy = "calculations")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id", referencedColumnName = "id")
     @Getter @Setter
-    private List<Project> projects = new ArrayList<>();
+    private Project project;
 
 
     // 2. Constructors
     public Calculation() {}
 
-    public Calculation(Long id, double sunHours, double dailyConsumption, double dailyProduction, LocalDate calculationDate, String comment, double totalPrice, List<Project> projects) {
+    public Calculation(Long id, double sunHours, double dailyConsumption, double dailyProduction, LocalDate calculationDate, String comment, double totalPrice, Project project) {
         this.id = id;
         this.sunHours = sunHours;
         this.dailyConsumption = dailyConsumption;
@@ -64,7 +65,7 @@ public class Calculation {
         this.calculationDate = calculationDate;
         this.comment = comment;
         this.totalPrice = totalPrice;
-        this.projects = projects;
+        this.project = project;
     }
 
     /*

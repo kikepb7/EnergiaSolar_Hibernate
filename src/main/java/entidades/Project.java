@@ -45,12 +45,7 @@ public class Project {
     @Getter @Setter
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "calculation_project",
-            joinColumns = @JoinColumn(name = "project_id"),
-            inverseJoinColumns = @JoinColumn(name = "calculation_id")
-    )
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY)
     @Getter @Setter
     private List<Calculation> calculations = new ArrayList<>();
 

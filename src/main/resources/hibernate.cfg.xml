@@ -17,7 +17,7 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         <!-- En este caso si ponemos update no vuelve a crear los datos-->
 <!--                <property name="hibernate.hbm2ddl.auto">create</property>-->
-        <!--Para importar múltiples archivos sql utilizamos:-->
+<!--        Para importar múltiples archivos sql utilizamos:-->
 <!--        <property name="hibernate.hbm2ddl.import_files">import.sql,data.sql</property>-->
 
         <!-- entities -->
