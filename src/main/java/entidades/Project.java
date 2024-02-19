@@ -45,7 +45,7 @@ public class Project {
     @Getter @Setter
     private User user;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinTable(
             name = "calculation_project",
             joinColumns = @JoinColumn(name = "project_id"),

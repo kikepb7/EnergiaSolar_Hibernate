@@ -48,7 +48,7 @@ public class Calculation {
     @Getter @Setter @Expose
     private double totalPrice;
 
-    @ManyToMany(mappedBy = "calculations")
+    @OneToMany(mappedBy = "calculations")
     @Getter @Setter
     private List<Project> projects = new ArrayList<>();
 
