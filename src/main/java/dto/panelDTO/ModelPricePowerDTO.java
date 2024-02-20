@@ -1,5 +1,6 @@
 package dto.panelDTO;
 
+import com.google.gson.annotations.Expose;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,11 +11,11 @@ import lombok.ToString;
 public class ModelPricePowerDTO {
 
     // 1. Attributes
-    @Getter @Setter
+    @Getter @Setter @Expose
     private String model;
-    @Getter @Setter
+    @Getter @Setter @Expose
     private int nominalPower;
-    @Getter @Setter
+    @Getter @Setter @Expose
     private double price;
 
 
