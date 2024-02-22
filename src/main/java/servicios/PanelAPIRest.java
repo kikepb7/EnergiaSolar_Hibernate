@@ -30,6 +30,7 @@ public class PanelAPIRest {
     private final PanelDAOInterface panelDAO;
 
     private final APIKeyDAOInterface tokenDAO;
+    private final UserDAOInterface userDAO;
 
     private final Gson gson = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -38,10 +39,11 @@ public class PanelAPIRest {
 
 
     // 2. Constructor
-    public PanelAPIRest(PanelDAOInterface implementation, APIKeyDAOInterface impl) {
+    public PanelAPIRest(PanelDAOInterface implementation, APIKeyDAOInterface impl, UserDAOInterface implUser) {
 //        Spark.port(8080);
         panelDAO = implementation;
         tokenDAO = impl;
+        userDAO = implUser;
 
         /* PROTECCIÓN CON TOKEN */
         /*Spark.before("paneles/*", (request, response) -> {
@@ -522,6 +524,23 @@ public class PanelAPIRest {
             e.printStackTrace(); // Imprime la excepción en la consola
             res.status(500); // Establece el código de estado HTTP 500
             res.body("Excepcion en tu codigo"); // Mensaje de error para el cliente
+        });
+
+
+        // LOGIN
+        Spark.post("/login", (request, response) -> {
+           // Obtenemos los parámetros de la solicitud
+           String email = request.queryParams(":email");
+           String password = request.queryParams(":password");
+
+           // Verificamos la autenticación
+            User authenticatedUser = implUser.authUser(email, password);
+
+            if (authenticatedUser != null) {
+                return "Login exitoso: " + authenticatedUser.getName();
+            } else {
+                return "Credenciales incorrectas";
+            }
         });
     }
 }

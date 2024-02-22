@@ -3,6 +3,7 @@ package dao.user;
 import entidades.Report;
 import entidades.User;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import util.HibernateUtil;
 
 import javax.persistence.PersistenceException;
@@ -32,5 +33,30 @@ public class UserDAO implements UserDAOInterface {
         session.close();
 
         return user;
+    }
+
+    @Override
+    public User authUser(String email, String password) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        User user;
+
+        try {
+            session.beginTransaction();
+
+            Query<User> query = session.createQuery("FROM User WHERE email = :email", User.class);
+            query.setParameter("email", email);
+            user = query.uniqueResult();
+
+            if (user != null && user.getPassword().equals(password)) {
+                return user;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            session.close();
+        }
     }
 }

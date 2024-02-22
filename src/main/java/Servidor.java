@@ -14,11 +14,9 @@ public class Servidor {
     public static void main(String[] args) {
 
         Spark.port(8080);
-        PanelAPIRest api = new PanelAPIRest(new PanelDAO(), new APIKeyDAO());
+        PanelAPIRest api = new PanelAPIRest(new PanelDAO(), new APIKeyDAO(), new UserDAO());
 
         AssociationsAPIRest apiAssociations = new AssociationsAPIRest(new PanelDAO(), new ReportDAO(), new UserDAO(), new ProjectDAO(), new AssociationsDAO(), new APIKeyDAO());
-
-
 
 
         enableCORS("*", "*", "*");
