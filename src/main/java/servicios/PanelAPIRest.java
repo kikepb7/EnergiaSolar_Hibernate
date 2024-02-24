@@ -3,15 +3,16 @@ package servicios;
 import com.appslandia.common.gson.LocalDateAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dao.associations.AssociationsDAOInterface;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import dao.panel.PanelDAOInterface;
-import dao.project.ProjectDAOInterface;
-import dao.report.ReportDAOInterface;
 import dao.security.APIKeyDAOInterface;
 import dao.user.UserDAOInterface;
-import dto.panelDTO.PanelDTO;
 import dto.panelDTO.ModelPricePowerDTO;
-import entidades.*;
+import dto.panelDTO.PanelDTO;
+import entidades.Panel;
+import entidades.Token;
+import entidades.User;
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
@@ -21,8 +22,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static spark.Spark.before;
 
 public class PanelAPIRest {
 
@@ -336,7 +335,6 @@ public class PanelAPIRest {
         });
 
 
-
         // ---------------------------------------------------------------------------------------- //
 
 
@@ -529,18 +527,24 @@ public class PanelAPIRest {
 
         // LOGIN
         Spark.post("/login", (request, response) -> {
-           // Obtenemos los parámetros de la solicitud
-           String email = request.queryParams(":email");
-           String password = request.queryParams(":password");
+            response.type("application/json");
 
-           // Verificamos la autenticación
+            String body = request.body();
+            JsonObject responseBody = new JsonObject();
+
+            JsonObject requestBody = JsonParser.parseString(body).getAsJsonObject();
+            String email = requestBody.get("email").getAsString();
+            String password = requestBody.get("password").getAsString();
+
             User authenticatedUser = implUser.authUser(email, password);
 
             if (authenticatedUser != null) {
-                return "Login exitoso: " + authenticatedUser.getName();
+                responseBody.addProperty("id", authenticatedUser.getId());
             } else {
-                return "Credenciales incorrectas";
+                responseBody.addProperty("error", "Credenciales incorrectas");
             }
+
+            return responseBody.toString();
         });
     }
 }
