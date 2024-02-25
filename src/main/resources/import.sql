@@ -47,13 +47,13 @@ INSERT INTO panel(brand, category, efficiency, image, model, nominal_power, pric
 INSERT INTO panel(brand, category, efficiency, image, model, nominal_power, price, production_date) VALUES('Risen Energy', 'Polycrystalline', 21.5, 'https://firebasestorage.googleapis.com/v0/b/paneles-solares-hibernate.appspot.com/o/EnergiaSolar-Hibernate%2FPlaca_Solar_75_Policristalino_77_44.jpg?alt=media&token=64d91a1f-69d2-4bbb-a04e-5599464288f6', 'RE-003', 75, 77.44, '2017/05/15');
 INSERT INTO panel(brand, category, efficiency, image, model, nominal_power, price, production_date) VALUES('Risen Energy', 'Bifacial', 23.3, 'https://firebasestorage.googleapis.com/v0/b/paneles-solares-hibernate.appspot.com/o/EnergiaSolar-Hibernate%2FPlaca_Solar_560_Bifacial_187_50.jpg?alt=media&token=7a80cd3e-8797-41b4-8b1b-364fbba9105f', 'RE-004', 560, 187.50, '2022/12/05');
 
-INSERT INTO user(admin, email, lastName, name, password, phone) VALUES(1, 'enrique@example.com', 'Palma', 'Enrique', 'password1', '+34647111111');
-INSERT INTO user(admin, email, lastName, name, password, phone) VALUES(0, 'jose@example.com', 'García', 'Jose Miguel', 'password2', '+34647222222');
-INSERT INTO user(admin, email, lastName, name, password, phone) VALUES(0, 'ruben@example.com', 'Fernandez', 'Rubén', 'password3', '+34647333333');
-INSERT INTO user(admin, email, lastName, name, password, phone) VALUES(0, 'fabio@example.com', 'Sánchez', 'Fabio', 'password4', '+34647444444');
-INSERT INTO user(admin, email, lastName, name, password, phone) VALUES(0, 'david@example.com', 'Delgado', 'David', 'password5', '+34647555555');
-INSERT INTO user(admin, email, lastName, name, password, phone) VALUES(0, 'carmen@example.com', 'Bullejos', 'Carmen', 'password6', '+34647666666');
-INSERT INTO user(admin, email, lastName, name, password, phone) VALUES(0, 'ana@example.com', 'Candenas', 'Ana', 'password7', '+34647777777');
+INSERT INTO user(admin, email, image, lastName, name, password, phone) VALUES(1, 'enrique@example.com', "", 'Palma', 'Enrique', 'password1', '+34647111111');
+INSERT INTO user(admin, email, image, lastName, name, password, phone) VALUES(0, 'jose@example.com', "https://firebasestorage.googleapis.com/v0/b/paneles-solares-hibernate.appspot.com/o/EnergiaSolar-Hibernate%2FJose.png?alt=media&token=07b5d1fb-8d64-4113-b1bd-bb4f27668925", 'García', 'Jose Miguel', 'password2', '+34647222222');
+INSERT INTO user(admin, email, image, lastName, name, password, phone) VALUES(0, 'ruben@example.com', "https://firebasestorage.googleapis.com/v0/b/paneles-solares-hibernate.appspot.com/o/EnergiaSolar-Hibernate%2FRuben.png?alt=media&token=7d158b61-4d2f-4b6f-9d9f-71455611e12f", 'Fernandez', 'Rubén', 'password3', '+34647333333');
+INSERT INTO user(admin, email, image, lastName, name, password, phone) VALUES(0, 'fabio@example.com', "https://firebasestorage.googleapis.com/v0/b/paneles-solares-hibernate.appspot.com/o/EnergiaSolar-Hibernate%2FFabio.png?alt=media&token=db47cad7-524a-4095-93b3-d1b467fb3510", 'Sánchez', 'Fabio', 'password4', '+34647444444');
+INSERT INTO user(admin, email, image, lastName, name, password, phone) VALUES(0, 'david@example.com', "https://firebasestorage.googleapis.com/v0/b/paneles-solares-hibernate.appspot.com/o/EnergiaSolar-Hibernate%2FDavid.png?alt=media&token=79c374e0-1147-4fd4-b920-109c905e00c4", 'Delgado', 'David', 'password5', '+34647555555');
+INSERT INTO user(admin, email, image, lastName, name, password, phone) VALUES(0, 'carmen@example.com', "", 'Bullejos', 'Carmen', 'password6', '+34647666666');
+INSERT INTO user(admin, email, image, lastName, name, password, phone) VALUES(0, 'ana@example.com', "", 'Candenas', 'Ana', 'password7', '+34647777777');
 
 INSERT INTO project(address, generation_capacity, instalation_date, name, user_id) VALUES('C/ Nueva, 8', 20000.0, '2023-12-17', 'Instalación 1', 2);
 INSERT INTO project(address, generation_capacity, instalation_date, name, user_id) VALUES('C/ Dámaso Alonso, 13', 15000.0, '2024-01-12', 'Instalación 2', 3);
@@ -64,17 +64,19 @@ INSERT INTO project(address, generation_capacity, instalation_date, name, user_i
 INSERT INTO report(content, registration_date, serial_report, user_id) VALUES('Error al recibir toda la potencia contratada', '2024-02-12', 'AV-123-456', 2);
 INSERT INTO report(content, registration_date, serial_report, user_id) VALUES('Desconexión de la red', '2024-02-13', 'AV-456-789', 3);
 
-INSERT INTO panel_project(project_id, panel_id) VALUES(1, 1);
-INSERT INTO panel_project(project_id, panel_id) VALUES(1, 2);
-INSERT INTO panel_project(project_id, panel_id) VALUES(1, 3);
-INSERT INTO panel_project(project_id, panel_id) VALUES(2, 5);
-INSERT INTO panel_project(project_id, panel_id) VALUES(2, 9);
-INSERT INTO panel_project(project_id, panel_id) VALUES(3, 2);
-INSERT INTO panel_project(project_id, panel_id) VALUES(3, 6);
-INSERT INTO panel_project(project_id, panel_id) VALUES(3, 12);
-INSERT INTO panel_project(project_id, panel_id) VALUES(4, 8);
-INSERT INTO panel_project(project_id, panel_id) VALUES(4, 14);
-INSERT INTO panel_project(project_id, panel_id) VALUES(5, 7);
-INSERT INTO panel_project(project_id, panel_id) VALUES(5, 10);
-INSERT INTO panel_project(project_id, panel_id) VALUES(5, 15);
+INSERT INTO panel_project(project_id, panel_id) VALUES(41, 1);
+INSERT INTO panel_project(project_id, panel_id) VALUES(41, 2);
+INSERT INTO panel_project(project_id, panel_id) VALUES(41, 3);
+INSERT INTO panel_project(project_id, panel_id) VALUES(42, 5);
+INSERT INTO panel_project(project_id, panel_id) VALUES(42, 9);
+INSERT INTO panel_project(project_id, panel_id) VALUES(43, 2);
+INSERT INTO panel_project(project_id, panel_id) VALUES(43, 6);
+INSERT INTO panel_project(project_id, panel_id) VALUES(43, 12);
+INSERT INTO panel_project(project_id, panel_id) VALUES(44, 8);
+INSERT INTO panel_project(project_id, panel_id) VALUES(44, 14);
+INSERT INTO panel_project(project_id, panel_id) VALUES(45, 7);
+INSERT INTO panel_project(project_id, panel_id) VALUES(45, 10);
+INSERT INTO panel_project(project_id, panel_id) VALUES(45, 15);
+
+
 --INSERT INTO calculation();

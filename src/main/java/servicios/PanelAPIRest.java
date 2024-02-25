@@ -10,6 +10,7 @@ import dao.security.APIKeyDAOInterface;
 import dao.user.UserDAOInterface;
 import dto.panelDTO.ModelPricePowerDTO;
 import dto.panelDTO.PanelDTO;
+import dto.userDTO.UserDTO;
 import entidades.Panel;
 import entidades.Token;
 import entidades.User;
@@ -545,6 +546,23 @@ public class PanelAPIRest {
             }
 
             return responseBody.toString();
+        });
+
+        // Mostrar DTO del usuario
+        Spark.get("/usuario/:userId", (request, response) -> {
+
+            response.type("application/json");
+
+            Long id = Long.parseLong(request.params(":userId"));
+
+            UserDTO user = userDAO.getUserInfo(id);
+
+            if (user != null) {
+                return gson.toJson(user);
+            } else {
+                response.status(404);
+                return "No se encontró el usuario con el ID proporcionado";
+            }
         });
     }
 }

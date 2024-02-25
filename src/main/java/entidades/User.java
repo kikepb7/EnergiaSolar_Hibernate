@@ -41,6 +41,10 @@ public class User implements Serializable {
     @Getter @Setter @Expose
     private String password;
 
+    @Column(name = "image")
+    @Getter @Setter @Expose
+    private String image;
+
     @Column(name = "admin", nullable = false)
     @Getter @Setter @Expose
     private boolean admin;
@@ -57,13 +61,14 @@ public class User implements Serializable {
     // 2. Constructors
     public User() {}
 
-    public User(Long id, String name, String lastName, String phone, String email, String password, boolean admin, List<Project> projects, List<Report> reports) {
+    public User(Long id, String name, String lastName, String phone, String email, String password, String image, boolean admin, List<Project> projects, List<Report> reports) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
         this.phone = phone;
         this.email = email;
         this.password = password;
+        this.image = image;
         this.admin = admin;
         this.projects = projects;
         this.reports = reports;

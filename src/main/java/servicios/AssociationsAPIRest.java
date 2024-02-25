@@ -179,6 +179,21 @@ public class AssociationsAPIRest {
         // Listar todos los proyectos de un cálculo concreto
 
 
+        // Crear un nuevo reporte
+        Spark.post("/reportes/registrar/:userId", (request, response) -> {
+            String body = request.body();
+
+            Report newReport = gson.fromJson(body, Report.class);
+            Long userId = Long.parseLong(request.params("userId"));
+            User newUser = userDAO.findById(userId);
+
+            Report createdReport = reportDAO.createReport(newReport);
+
+            associationDAO.assignReportUser(createdReport, newUser);
+            return gson.toJson(createdReport);
+        });
+
+
         // PRUEBA
         Spark.exception(Exception.class, (e, req, res) -> {
             e.printStackTrace();

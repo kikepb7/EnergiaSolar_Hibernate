@@ -1,12 +1,15 @@
 package dao.user;
 
+import dto.userDTO.UserDTO;
 import entidades.Report;
 import entidades.User;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
 import javax.persistence.PersistenceException;
+import java.util.List;
 
 public class UserDAO implements UserDAOInterface {
     @Override
@@ -57,6 +60,25 @@ public class UserDAO implements UserDAOInterface {
             return null;
         } finally {
             session.close();
+        }
+    }
+
+    @Override
+    public UserDTO getUserInfo(Long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            UserDTO user = session.createQuery(
+                            "SELECT NEW dto.userDTO.UserDTO(u.name, u.lastName, u.email, u.image) FROM User u WHERE id = :id", UserDTO.class)
+                    .setParameter("id", id)
+                    .uniqueResult();
+
+            session.close();
+
+            return user;
+        } catch (HibernateException e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 }
