@@ -209,7 +209,7 @@ public class AssociationsAPIRest {
         });
 
         // Asignar paneles solares a un proyecto
-        Spark.post("/proyecto/asirnar_panel/:proyectId/:panelId", (request, response) -> {
+        Spark.post("/proyecto/asignar_panel/:proyectId/:panelId", (request, response) -> {
             String body = request.body();
 
             Project project = gson.fromJson(body, Project.class);
