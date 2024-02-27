@@ -548,7 +548,19 @@ public class PanelAPIRest {
             return responseBody.toString();
         });
 
-        // Mostrar DTO del usuario
+
+        // Endpoint para registar un usuario
+        Spark.post("/usuario/registrar", (request, response) -> {
+           String body = request.body();
+           User newUser = gson.fromJson(body, User.class);
+
+           User created = userDAO.createUser(newUser);
+
+           return gson.toJson(created);
+        });
+
+
+        // Mostrar DTO del usuario (name, lastName, email, image)
         Spark.get("/usuario/:userId", (request, response) -> {
 
             response.type("application/json");

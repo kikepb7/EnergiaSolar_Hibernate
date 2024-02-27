@@ -64,19 +64,19 @@ INSERT INTO project(address, generation_capacity, instalation_date, name, user_i
 INSERT INTO report(content, registration_date, serial_report, user_id) VALUES('Error al recibir toda la potencia contratada', '2024-02-12', 'AV-123-456', 2);
 INSERT INTO report(content, registration_date, serial_report, user_id) VALUES('Desconexión de la red', '2024-02-13', 'AV-456-789', 3);
 
-INSERT INTO panel_project(project_id, panel_id) VALUES(41, 1);
-INSERT INTO panel_project(project_id, panel_id) VALUES(41, 2);
-INSERT INTO panel_project(project_id, panel_id) VALUES(41, 3);
-INSERT INTO panel_project(project_id, panel_id) VALUES(42, 5);
-INSERT INTO panel_project(project_id, panel_id) VALUES(42, 9);
-INSERT INTO panel_project(project_id, panel_id) VALUES(43, 2);
-INSERT INTO panel_project(project_id, panel_id) VALUES(43, 6);
-INSERT INTO panel_project(project_id, panel_id) VALUES(43, 12);
-INSERT INTO panel_project(project_id, panel_id) VALUES(44, 8);
-INSERT INTO panel_project(project_id, panel_id) VALUES(44, 14);
-INSERT INTO panel_project(project_id, panel_id) VALUES(45, 7);
-INSERT INTO panel_project(project_id, panel_id) VALUES(45, 10);
-INSERT INTO panel_project(project_id, panel_id) VALUES(45, 15);
+INSERT INTO panel_project(project_id, panel_id) VALUES(1, 1);
+INSERT INTO panel_project(project_id, panel_id) VALUES(1, 2);
+INSERT INTO panel_project(project_id, panel_id) VALUES(1, 3);
+INSERT INTO panel_project(project_id, panel_id) VALUES(2, 5);
+INSERT INTO panel_project(project_id, panel_id) VALUES(2, 9);
+INSERT INTO panel_project(project_id, panel_id) VALUES(3, 2);
+INSERT INTO panel_project(project_id, panel_id) VALUES(3, 6);
+INSERT INTO panel_project(project_id, panel_id) VALUES(3, 12);
+INSERT INTO panel_project(project_id, panel_id) VALUES(4, 8);
+INSERT INTO panel_project(project_id, panel_id) VALUES(4, 14);
+INSERT INTO panel_project(project_id, panel_id) VALUES(5, 7);
+INSERT INTO panel_project(project_id, panel_id) VALUES(5, 10);
+INSERT INTO panel_project(project_id, panel_id) VALUES(5, 15);
 
 
 --INSERT INTO calculation();

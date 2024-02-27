@@ -194,6 +194,37 @@ public class AssociationsAPIRest {
         });
 
 
+        // Asociar un nuevo proyecto a un usuario concreto
+        Spark.post("/proyecto/registrar/:userId", (request, response) -> {
+            String body = request.body();
+
+            Project newProject = gson.fromJson(body, Project.class);
+            Long userId = Long.parseLong(request.params("userId"));
+            User newUser = userDAO.findById(userId);
+
+            Project createProject = projectDAO.createProject(newProject);
+
+            associationDAO.assignUserProject(newUser, createProject);
+            return gson.toJson(createProject);
+        });
+
+        // Asignar paneles solares a un proyecto
+        Spark.post("/proyecto/asirnar_panel/:proyectId/:panelId", (request, response) -> {
+            String body = request.body();
+
+            Project project = gson.fromJson(body, Project.class);
+            Panel panel = gson.fromJson(body, Panel.class);
+
+            Long projectId = Long.parseLong(request.params("projectId"));
+            Long panelId = Long.parseLong(request.params("panelId"));
+
+            Project createdProject = projectDAO.findById(projectId);
+            Panel createdPanel = panelDAO.findById(panelId);
+
+            return gson.toJson(associationDAO.assignPanelProject(createdPanel, createdProject));
+        });
+
+
         // PRUEBA
         Spark.exception(Exception.class, (e, req, res) -> {
             e.printStackTrace();
