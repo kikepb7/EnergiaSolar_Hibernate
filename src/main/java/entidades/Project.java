@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 @Table(name = "Project")
 @ToString
 @EqualsAndHashCode
-public class Project {
+public class Project implements Serializable {
 
     // 1. Attributes
     @Id

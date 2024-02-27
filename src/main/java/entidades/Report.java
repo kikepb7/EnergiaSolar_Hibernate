@@ -7,13 +7,14 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "Report")
 @ToString
 @EqualsAndHashCode
-public class Report {
+public class Report implements Serializable {
 
     // 1. Attributes
     @Id

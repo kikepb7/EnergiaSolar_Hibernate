@@ -6,11 +6,12 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "Token")
 @ToString @EqualsAndHashCode
-public class Token {
+public class Token implements Serializable {
     // 1. Attributess
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

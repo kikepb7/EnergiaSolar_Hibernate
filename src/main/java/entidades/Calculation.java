@@ -8,6 +8,7 @@ import lombok.ToString;
 import org.hibernate.annotations.GeneratorType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 @Table(name = "Calculation")
 @ToString
 @EqualsAndHashCode
-public class Calculation {
+public class Calculation implements Serializable {
 
     // 1. Attributes
     @Id
