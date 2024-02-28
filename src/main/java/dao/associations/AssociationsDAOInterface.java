@@ -8,7 +8,7 @@ public interface AssociationsDAOInterface {
 
     boolean assignReportUser(Report r, User u);
 
-    boolean assignUserProject(User u, Project pr);
+    boolean assignProjectUser(Project pr, User u);
 
     boolean assignPanelProject(Panel p, Project pr);
 

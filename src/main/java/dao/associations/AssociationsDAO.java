@@ -1,6 +1,7 @@
 package dao.associations;
 
 import entidades.*;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
@@ -33,21 +34,21 @@ public class AssociationsDAO implements AssociationsDAOInterface {
     }
 
     @Override
-    public boolean assignUserProject(User u, Project pr) {
+    public boolean assignProjectUser(Project pr, User u) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
             session.beginTransaction();
-            u.getProjects().add(pr);
-            session.update(u);
+            pr.setUser(u);
+            session.update(pr);
             session.getTransaction().commit();
         } catch (PersistenceException e) {
             e.printStackTrace();
             session.getTransaction().rollback();
             return false;
-        } finally {
-            session.close();
         }
+            session.close();
+
 
         return true;
     }
@@ -57,10 +58,20 @@ public class AssociationsDAO implements AssociationsDAOInterface {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         try {
+            List<Panel> panel_list = installedPanels(pr);
+            panel_list.add(p);
+            pr.setPanels(panel_list);
+
+            List<Project> project_list = projectPanels(p);
+            project_list.add(pr);
+            p.setProjects(project_list);
+
             session.beginTransaction();
-            p.getProjects().add(pr);
+
             session.update(p);
+            session.update(pr);
             session.getTransaction().commit();
+
         } catch (PersistenceException e) {
             e.printStackTrace();
             session.getTransaction().rollback();

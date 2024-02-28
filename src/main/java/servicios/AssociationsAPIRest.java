@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.associations.AssociationsDAOInterface;
 import dao.panel.PanelDAOInterface;
+import dao.project.ProjectDAO;
 import dao.project.ProjectDAOInterface;
 import dao.report.ReportDAOInterface;
 import dao.security.APIKeyDAOInterface;
@@ -176,7 +177,6 @@ public class AssociationsAPIRest {
             }
         });
 
-        // Listar todos los proyectos de un cálculo concreto
 
 
         // Crear un nuevo reporte
@@ -204,24 +204,22 @@ public class AssociationsAPIRest {
 
             Project createProject = projectDAO.createProject(newProject);
 
-            associationDAO.assignUserProject(newUser, createProject);
+            associationDAO.assignProjectUser(createProject, newUser);
             return gson.toJson(createProject);
         });
 
-        // Asignar paneles solares a un proyecto
-        Spark.post("/proyecto/asignar_panel/:proyectId/:panelId", (request, response) -> {
-            String body = request.body();
 
-            Project project = gson.fromJson(body, Project.class);
-            Panel panel = gson.fromJson(body, Panel.class);
+        // Asignar paneles solares a un proyecto
+        Spark.post("/proyecto/asignar_panel/:projectId/:panelId", (request, response) -> {
 
             Long projectId = Long.parseLong(request.params("projectId"));
             Long panelId = Long.parseLong(request.params("panelId"));
 
-            Project createdProject = projectDAO.findById(projectId);
-            Panel createdPanel = panelDAO.findById(panelId);
+            Project pr = projectDAO.findById(projectId);
+            Panel p = panelDAO.findById(panelId);
 
-            return gson.toJson(associationDAO.assignPanelProject(createdPanel, createdProject));
+            response.type("application/json");
+            return gson.toJson(associationDAO.assignPanelProject(p, pr));
         });
 
 
@@ -230,6 +228,23 @@ public class AssociationsAPIRest {
             e.printStackTrace();
             res.status(500);
             res.body("Excepcion en tu codigo");
+        });
+
+
+        // Mostrar un proyecto concreto
+        Spark.get("/proyecto/:projectId", (request, response) -> {
+
+            response.type("application/json");
+
+            Long id = Long.parseLong(request.params(":projectId"));
+            Project project = projectDAO.findById(id);
+
+            if (project != null) {
+                return gson.toJson(project);
+            } else {
+                response.status(404);
+                return "Proyecto no encontrado";
+            }
         });
     }
 }
