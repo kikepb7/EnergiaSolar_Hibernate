@@ -1,5 +1,6 @@
 package dao.report;
 
+import entidades.Panel;
 import entidades.Report;
 import entidades.User;
 import org.hibernate.Session;
@@ -39,5 +40,49 @@ public class ReportDAO implements ReportDAOInterface {
         session.close();
 
         return r;
+    }
+
+    @Override
+    public Report update(Report report) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            session.beginTransaction();
+            session.update(report);
+            session.getTransaction().commit();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+        }
+
+        session.close();
+
+        return report;
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            session.beginTransaction();
+            Report report = this.findById(id);
+
+            if (report != null) {
+                session.delete(report);
+            } else {
+                return false;
+            }
+
+            session.getTransaction().commit();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            session.close();
+        }
+
+        return true;
     }
 }

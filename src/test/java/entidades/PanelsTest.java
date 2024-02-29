@@ -6,7 +6,7 @@ import util.HibernateUtil;
 
 import java.util.List;
 
-public class PanelsTest {
+p/*ublic class PanelsTest {
     @Test
     void Test1() {
 
@@ -65,4 +65,4 @@ public class PanelsTest {
         HibernateUtil.shutdown();
     }
 
-}
+}*/

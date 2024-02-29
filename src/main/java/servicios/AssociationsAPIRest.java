@@ -41,6 +41,38 @@ public class AssociationsAPIRest {
         tokenDAO = impl;
 
 
+        // Endpoint para actualizar un reporte por su ID
+        Spark.put("reportes/editar/:id", (request, response) -> {
+
+            Long id = Long.parseLong(request.params(":id"));
+            String body = request.body();
+
+            Report report = gson.fromJson(body, Report.class);
+            report.setId(id);
+
+            Report updatedReport = reportDAO.update(report);
+            if (updatedReport != null) {
+                return gson.toJson(updatedReport);
+            } else {
+                response.status(404);
+                return "Report no encontrado";
+            }
+        });
+
+        // Endpoint para eliminar un reporte por su ID
+        Spark.delete("/reportes/:id", (request, response) -> {
+            Long id = Long.parseLong(request.params(":id"));
+            boolean isDeleted = reportDAO.deleteById(id);
+
+            if (isDeleted) {
+                return "Reporte eliminado correctamente";
+            } else {
+                response.status(404);
+                return "Reporte no encontrado";
+            }
+        });
+
+
         // ---------------------------------------------------------------------------------------- //
         // RELACIONES
 
