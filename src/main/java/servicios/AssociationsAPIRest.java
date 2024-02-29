@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dao.associations.AssociationsDAOInterface;
 import dao.panel.PanelDAOInterface;
-import dao.project.ProjectDAO;
 import dao.project.ProjectDAOInterface;
 import dao.report.ReportDAOInterface;
 import dao.security.APIKeyDAOInterface;
@@ -209,8 +208,6 @@ public class AssociationsAPIRest {
             }
         });
 
-
-
         // Crear un nuevo reporte
         Spark.post("/reportes/registrar/:userId", (request, response) -> {
             String body = request.body();
@@ -224,7 +221,6 @@ public class AssociationsAPIRest {
             associationDAO.assignReportUser(createdReport, newUser);
             return gson.toJson(createdReport);
         });
-
 
         // Asociar un nuevo proyecto a un usuario concreto
         Spark.post("/proyecto/registrar/:userId", (request, response) -> {
@@ -240,7 +236,6 @@ public class AssociationsAPIRest {
             return gson.toJson(createProject);
         });
 
-
         // Asignar paneles solares a un proyecto
         Spark.post("/proyecto/asignar_panel/:projectId/:panelId", (request, response) -> {
 
@@ -253,15 +248,6 @@ public class AssociationsAPIRest {
             response.type("application/json");
             return gson.toJson(associationDAO.assignPanelProject(p, pr));
         });
-
-
-        // PRUEBA
-        Spark.exception(Exception.class, (e, req, res) -> {
-            e.printStackTrace();
-            res.status(500);
-            res.body("Excepcion en tu codigo");
-        });
-
 
         // Mostrar un proyecto concreto
         Spark.get("/proyecto/:projectId", (request, response) -> {
@@ -277,6 +263,29 @@ public class AssociationsAPIRest {
                 response.status(404);
                 return "Proyecto no encontrado";
             }
+        });
+
+        // Borrar un usuario y todos los proyectos y reportes que le pertenecen
+        Spark.delete("/usuario/borrar/:userId", (request, response) -> {
+            response.type("application/json");
+
+            Long id = Long.parseLong(request.params(":userId"));
+            User user = userDAO.findById(id);
+
+            if (user != null) {
+                userDAO.deleteById(id);
+                return "Usuario eliminado correctamente";
+            } else {
+                response.status(404);
+                return "Usuario no encontrado";
+            }
+        });
+
+        // PRUEBA
+        Spark.exception(Exception.class, (e, req, res) -> {
+            e.printStackTrace();
+            res.status(500);
+            res.body("Excepcion en tu codigo");
         });
     }
 }

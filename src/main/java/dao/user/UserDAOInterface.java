@@ -10,4 +10,5 @@ public interface UserDAOInterface {
     User findById(Long id);
     User authUser(String email, String password);
     UserDTO getUserInfo(Long id);
+    boolean deleteById(Long id);
 }

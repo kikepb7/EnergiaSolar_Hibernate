@@ -1,6 +1,7 @@
 package dao.user;
 
 import dto.userDTO.UserDTO;
+import entidades.Panel;
 import entidades.Report;
 import entidades.User;
 import org.hibernate.HibernateException;
@@ -80,5 +81,34 @@ public class UserDAO implements UserDAOInterface {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    @Override
+    public boolean deleteById(Long id) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+            session.beginTransaction();
+            User user = session.get(User.class, id);
+
+            if (user != null) {
+                user.getProjects().size();
+                user.getReports();
+
+                session.delete(user);
+            } else {
+                return false;
+            }
+
+            session.getTransaction().commit();
+        } catch (PersistenceException e) {
+            e.printStackTrace();
+            session.getTransaction().rollback();
+            return false;
+        } finally {
+            session.close();
+        }
+
+        return true;
     }
 }
